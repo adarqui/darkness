@@ -63,6 +63,26 @@ To play around with it, stop by #adarq.org on freenode or #jumping on efnet.
  
 
 
+# Supported languages (listeners), so far.
+
+c, nodejs, go, php, perl, python, ruby
+
+16:03 <@ampd> ^c(vping)
+16:03 <@ref> c
+16:03 <@ampd> ^nodejs(vping)
+16:03 <@ref> nodejs
+16:03 <@ampd> ^go(vping)
+16:03 <@ref> go
+16:03 <@ampd> ^php(vping)
+16:03 <@ref> php
+16:04 <@ampd> ^perl(vping)
+16:04 <@ref> perl
+16:04 <@ampd> ^python(vping)
+16:04 <@ref> python
+16:04 <@ampd> ^ruby(vping)
+16:04 <@ref> ruby
+
+
 # Setting it up
 
 npm install
@@ -71,6 +91,7 @@ npm install
 cd listeners && make && make run
 
 coming soon.
+
 
 # Examples
 

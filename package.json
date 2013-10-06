@@ -24,7 +24,8 @@
 	"irc" : "*",
 	"hiredis" : "*",
 	"redis" : "*",
-	"randstring" : "*"
+	"randstring" : "*",
+	"libsyscalls" : "git://github.com/adarqui/libsyscalls.git#master"
   },
   "license": "MIT",
   "engines": {

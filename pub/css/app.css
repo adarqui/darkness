@@ -1,0 +1,6 @@
+.menubar { position: fixed; background-color : white }
+.app { padding-top : 40px }
+.thumb {float:left;text-align:center;border:1px solid #999;margin-right:10px;margin-bottom:10px;}
+.thumbVid {width: 650px; height: 650px; float:left;text-align:center;border:1px solid #999;margin-right:10px;margin-bottom:10px;}
+.thumbvidImg {max-width:600px ; max-height: 338px }
+.flowplayer { width: 600px; height: 350px; max-width: 600px; max-height: 350px; }

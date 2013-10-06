@@ -1,0 +1,58 @@
+<html>
+	<head>
+	
+		<link rel="stylesheet" href="/static/css/app.css"/>
+		<link rel="stylesheet" type="text/css" href="/static/css/pretty.css" />
+
+		<script type="text/javascript" src="/static/js/jquery-min.js"></script>
+		<script type="text/javascript" src="/static/js/underscore-min.js"></script>
+		<script type="text/javascript" src="/static/js/backbone-min.js"></script>
+		<script type="text/javascript" src="/static/js/pretty.js" ></script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="/static/app.js"></script>
+	</head>
+	<body>
+
+        <div class="menubar" style="z-index:99999">
+            <a class="nav" href="/loc/home">Home</a>
+            <a class="nav" href="/loc/pipelines">pipelines</a>
+			<a class="nav" href="/loc/stats">stats</a>
+            <a class="nav" href="/loc/help">help</a>
+            <a class="nav" href="/loc/monitor">monitor</a>
+            <button class="refresh">Refresh</button>
+        </div>
+
+        <div class="app" style="z-index:0">
+        </div>
+
+        <!-- templates -->
+
+        <script type="template" rel="main">
+        </script>
+
+        <script type="template" rel="pipelines-V">
+<!--			<li class="key">hi<div class="keyContents"></div></li> -->
+			<div class="key">
+				<div class="info">
+					<%= index %>
+					</br>
+					<%= chat.message %>
+				</div>
+				<div class="controls">
+					<button class="graph">graph</button>
+				</div>
+				<div class="keyContents"></div>
+			</div>
+        </script>
+
+        <script type="template" rel="pipelines-VC">
+            <h1>Pipelines</h1>
+<p>todo: rankings</p>
+<p>todo: listeners</p>
+<!--            <ul class="pipelines"></ul> -->
+				<div class="pipelines"></div>
+        </script>
+
+
+	</body>
+</html>
