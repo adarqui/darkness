@@ -67,6 +67,7 @@ To play around with it, stop by #adarq.org on freenode or #jumping on efnet.
 
 c, nodejs, go, php, perl, python, ruby
 
+```
 16:03 <@ampd> ^c(vping)
 16:03 <@ref> c
 16:03 <@ampd> ^nodejs(vping)
@@ -81,7 +82,7 @@ c, nodejs, go, php, perl, python, ruby
 16:04 <@ref> python
 16:04 <@ampd> ^ruby(vping)
 16:04 <@ref> ruby
-
+```
 
 # Setting it up
 
