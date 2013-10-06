@@ -1,0 +1,33 @@
+{
+  "name": "darkness",
+  "preferGlobal": false,
+  "version": "0.0.1",
+  "author": "adarqui",
+  "description": "darkness",
+  "contributors": [
+    {
+      "name": "Andrew Darqui",
+      "email": "andrew.darqui@gmail.com"
+    }
+  ],
+  "keywords": [
+    "cli",
+    "irc",
+    "redis",
+	"bot"
+  ],
+  "dependencies" : {
+    "express"   :  "*",
+    "underscore" : "*",
+    "socket.io" : "*",
+    "socket.io-client" : "*",
+	"irc" : "*",
+	"hiredis" : "*",
+	"redis" : "*",
+	"randstring" : "*"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.9"
+  }
+}
