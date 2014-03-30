@@ -112,7 +112,7 @@ var initHandle = function() {
 
 /*----------------------------------------------------------------------------------------
 -------
- * Middleware                                                                             
+ * Middleware
       *
  *----------------------------------------------------------------------------------------
 -----*/
@@ -180,7 +180,7 @@ var Pipeline = function(opts) {
 	}
 
 	self.init = function(o) {
-		self.setId()	
+		self.setId()
 		self.setExpressions(o)
 		self.expressions_length = self.getExpressionsLength()
 
@@ -237,10 +237,10 @@ var Pipeline = function(opts) {
 			self.evaluated[response.id.expression].responses = []
 			return true
 		} else {
-			element.responses.push(response)	
+			element.responses.push(response)
 			return false
 		}
-		
+
 	}
 
 
@@ -411,7 +411,7 @@ element.args = new_args
 
 		/* publishes the 'deepest' expression */
 		var element = self.expressions[0]
-	
+
 		var truth = self.parseSpecial(element)
 		if(truth == true) { return self.evaluate() }
 
@@ -434,7 +434,7 @@ element.args = new_args
 		self.fillExpression(expression)
 
 		var message = sub_channel + ':' + JSON.stringify(expression.args)
-		return message	
+		return message
 	}
 
 
@@ -450,13 +450,13 @@ response:
 
 */
 
-		
+
         var bundle = {
             id : {
                 pipeline : self.id,
                 expression : expression_id,
             },
-            type : "eval", 
+            type : "eval",
             opts : "null",
             ts : {
                 command : {
@@ -484,7 +484,7 @@ response:
 
 		if (opts == undefined) opts = {}
 
-        for(var v in expression.args) { 
+        for(var v in expression.args) {
             var arg = expression.args[v]
             if(typeof arg === 'object') {
                 var response = self.evaluated[arg.id]
@@ -532,7 +532,7 @@ opts.who = response.node.listener
 		delete c.pipelines[self.id]
 	}
 
-	
+
 
 	return self.init(opts)
 }

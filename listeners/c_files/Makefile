@@ -1,6 +1,6 @@
 FLAGS = -Wall --std=c99 -rdynamic
-HEADERS = -I ../ -I ../c_libs/hiredis/ -I /usr/local/include/json-c
-LINKER = -levent -ldl -fPIC -lc -L/usr/local/lib/ -ljson-c
+HEADERS = -I ../ -I /usr/local/include
+LINKER = -levent -ldl -fPIC -lc -L/usr/local/lib/ -ljson
 
 all:
 	gcc $(HEADERS) $(FLAGS) $(LINKER) -shared echo.c -o echo.so

@@ -13,8 +13,8 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/times.h>
-#include "hiredis.h"
-#include <json.h>
+#include <hiredis/hiredis.h>
+#include <json/json.h>
 #include <stddef.h>
 
 

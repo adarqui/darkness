@@ -1,0 +1,2 @@
+#!/bin/bash
+(cd c_libs; rm -rf hiredis; git clone https://github.com/redis/hiredis; cd hiredis; make; make install)

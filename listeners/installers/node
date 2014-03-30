@@ -1,0 +1,4 @@
+#!/bin/bash
+npm install -g node-gyp
+npm install
+(cd node_modules/libsyscalls/nodejs; ./build.sh)

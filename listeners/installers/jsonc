@@ -1,0 +1,2 @@
+#!/bin/bash
+(cd c_libs; rm -rf json-c; curl https://github.com/downloads/json-c/json-c/json-c-0.10.tar.gz > json-c.tgz ; tar zxvf json-c.tgz ; cd json-c-0.10 ; ./configure --prefix=/usr/local/ ; make ; make install)

@@ -17,11 +17,6 @@
     "bot"
   ],
   "dependencies" : {
-    "express"   :  "*",
-    "underscore" : "*",
-    "socket.io" : "*",
-    "socket.io-client" : "*",
-    "irc" : "*",
     "hiredis" : "*",
     "redis" : "*",
     "randstring" : "*",

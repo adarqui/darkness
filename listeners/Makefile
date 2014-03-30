@@ -1,43 +1,80 @@
 all:
-	echo "hi"
-	make c_compile
+	make compile_c
 
 run:
-	make node
-	make go
-	make c_run
-	make perl
-	make php
-	make python
-	make ruby
+	make run_node
+	make run_go
+	make run_c
+	make run_perl
+	make run_php
+	make run_python
+	make run_ruby
 
-node:
-	NODE_PATH=/root/admin/git/libsyscalls/nodejs/ node node.js --dbot_listener &
+deps:
+	apt-get install curl libevent-dev
+	make deps_hiredis
+	make deps_jsonc
 
-go:
+run_node:
+	NODE_PATH=./node_modules/libsyscalls/nodejs/ node node.js --dbot_listener &
+
+run_go:
 	GOPATH=/home/root/admin/git/kata/redis_1/golang go run go.go --dbot_listener &
 
-c_compile:
-	gcc -ggdb -L/usr/local/lib/ -ljson-c -I /usr/local/include/json-c -Wall -ldl -lhiredis -levent -O3 --std=c99 -D_GNU_SOURCE -I c_libs/hiredis/ c.c -o c
+compile_c:
+	gcc -ggdb -L/usr/local/lib/ -ljson -I /usr/local/include -Wall -ldl -lhiredis -levent -O3 --std=c99 -D_GNU_SOURCE c.c -ldl -lhiredis -ljson -o c
 
-c_clean:
+clean_c:
 	rm -f c
 
-c_run:
+run_c:
 	./c --dbot_listener &
 
-perl:
+run_perl:
 	perl perl.pl --dbot_listener &
 
-php:
+run_php:
 	php php.php --dbot_listener &
 
-python:
+run_python:
 	python python.py --dbot_listener &
 
-ruby:
+run_ruby:
 	ruby ruby.rb --dbot_listener &
 
 clean:
 	pkill -f dbot_listener
 	make c_clean
+
+deps_hiredis:
+	./installers/hiredis
+
+deps_jsonc:
+	./installers/jsonc
+
+deps_go:
+	./installers/go
+
+deps_ruby:
+	./installers/ruby
+
+deps_php:
+	./installers/php
+
+deps_scala:
+	./installers/scala
+
+deps_perl:
+	./installers/perl
+
+deps_haskell:
+	./installers/haskell
+
+deps_prolog:
+	./installers/prolog
+
+deps_fortran:
+	./installers/fortran
+
+deps_node:
+	./installers/node
