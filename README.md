@@ -1,3 +1,13 @@
+# Darkness
+
+a crazy polybot.
+
+under considerable construction.
+
+
+
+old:
+
 # Intro
 
 Quick and dirty readme just to get this thing on github.
