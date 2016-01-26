@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# export NODE_PATH=`pwd`/../node_modules/:`pwd`/../god/:`pwd`:../deps:./node_modules:`pwd`/../scheme/
+
+export NODE_PATH=`pwd`/../lib/
+
+export CONFIG=../../../config/tunnel/config.json
+
+node dbot_tunnel.js

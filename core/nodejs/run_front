@@ -1,4 +1,0 @@
-#!/bin/sh
-export NODE_PATH=`pwd`/../node_modules/:`pwd`/../god/:`pwd`:../deps:./node_modules:`pwd`/../scheme/:`pwd`/../misc/
-#node dbot_front.js &
-node dbot_front.js

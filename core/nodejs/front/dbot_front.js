@@ -8,7 +8,7 @@ var c;
 
 var initStrings = function() {
 	return {
-		config : 'config.js',
+		config : 'config.json',
 	}
 }
 
@@ -18,7 +18,8 @@ var initDeps = function() {
 		irc : require('irc'),
 		net : require('net'),
 		rands : require('randstring'),
-		config : require("./config/front/"+strings.config),
+//		config : require("./config/front/"+strings.config),
+    config : require(strings.config)
 	}
 }
 

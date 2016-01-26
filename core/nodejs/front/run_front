@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export NODE_PATH=`pwd`/../lib/
+
+export CONFIG=../../../config/front/config.json
+
+node dbot_front.js

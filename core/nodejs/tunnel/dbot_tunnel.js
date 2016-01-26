@@ -19,9 +19,9 @@ var initDeps = function() {
 	return {
 		net : require('net'),
 		redis : require('redis'),
-		Scheme : require('./scheme.js'),
+		Scheme : require('scheme.js'),
 		rands : require('randstring'),
-		config : require('./config/tunnel/'+strings.config),
+		config : require(strings.config),
 		express : require('express'),
 		io  : require('socket.io'),
 		http : require('http'),

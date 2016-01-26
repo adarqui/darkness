@@ -1,9 +1,9 @@
 {
-  "name": "darkness",
+  "name": "darkness-core-front",
   "preferGlobal": false,
   "version": "0.0.1",
   "author": "adarqui",
-  "description": "darkness",
+  "description": "front daemon for darkness",
   "contributors": [
     {
       "name": "Andrew Darqui",
@@ -24,8 +24,7 @@
     "irc" : "*",
     "hiredis" : "*",
     "redis" : "*",
-    "randstring" : "*",
-    "libsyscalls" : "git://github.com/adarqui/libsyscalls.git#master"
+    "randstring" : "*"
   },
   "license": "MIT",
   "engines": {
