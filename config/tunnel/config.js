@@ -7,7 +7,7 @@ module.exports = {
         pub : {},
         sub : {},
 
-        host : '127.0.0.1',
+        host : '10.0.3.10',
         port : 6379
 
     },

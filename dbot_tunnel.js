@@ -54,11 +54,11 @@ var initExpress = function() {
          * Initialize express routes/middleware
          */
 		c.http.app = d.express()
-        c.http.app.use(d.express.logger())
-        c.http.app.use(d.express.cookieParser())
-        c.http.app.use(d.express.bodyParser())
-		c.http.app.use(d.express.favicon())
-        c.http.app.use(d.express.session({ secret: "secret" }))
+//        c.http.app.use(d.express.logger())
+//        c.http.app.use(d.express.cookieParser())
+//        c.http.app.use(d.express.bodyParser())
+//		c.http.app.use(d.express.favicon())
+//        c.http.app.use(d.express.session({ secret: "secret" }))
 
         if(c.http.basicAuth == true) {
             c.http.app.use(d.express.basicAuth('root', 'pa11word'));
@@ -539,13 +539,13 @@ opts.who = response.node.listener
 
 
 var initRedis = function() {
-	c.redis.pub = d.redis.createClient()
+	c.redis.pub = d.redis.createClient("redis://10.0.3.10:6379")
 
 	c.redis.pub.on('error', function(err) {
 		console.log("redis: Error:", err)
 	})
 
-	c.redis.sub = d.redis.createClient()
+	c.redis.sub = d.redis.createClient("redis://10.0.3.10:6379")
 
 	c.redis.sub.on('error', function(err) {
 		console.log("redis subscriber: Error:", err)
