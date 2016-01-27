@@ -10,8 +10,8 @@
     "localhost" : {
       "address"      : "localhost",
       "port"         : 6667,
-      "nick"         : "darkness",
       "channels"     : [ "#darkness" ],
+      "nickName"     : "darkness",
       "userName"     : "darkness",
       "realName"     : "darkness",
       "debug"        : false,
