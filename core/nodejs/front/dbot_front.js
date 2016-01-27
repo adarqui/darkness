@@ -137,7 +137,7 @@ var connectIrc = function() {
 
     server.irc = new d.irc.Client(
       server.address,
-      server.nick,
+      server.nickName,
       server
     );
 
