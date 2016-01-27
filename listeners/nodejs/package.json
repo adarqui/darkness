@@ -20,6 +20,7 @@
     "hiredis" : "*",
     "redis" : "*",
     "randstring" : "*",
+    "underscore" : "*",
     "libsyscalls" : "git://github.com/adarqui/libsyscalls.git#master"
   },
   "license": "MIT",

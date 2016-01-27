@@ -753,7 +753,16 @@ var init = function() {
   strings = initStrings();
   initEnv();
   d = initDeps();
+
   c = initConf();
+  c.pipelines = {};
+  c.redis.pub = {};
+  c.redis.sub = {};
+  c.net.chan = {};
+  c.author.id = {};
+  c.http.app = {};
+  c.http.io = {};
+
   initId();
   initIndex();
   initHandle();

@@ -30,7 +30,7 @@ var initConf = function() {
 
 
 var initEnv = function() {
-  var conf = process.env['CONFIG']
+  var conf = process.env['CONFIG'];
   if(conf != undefined) { strings.config = conf; }
 }
 
@@ -46,6 +46,9 @@ var parseMessage = function(message) {
 /*
 {"prefix":"root!root@127.0.0.1","nick":"root","user":"root","host":"127.0.0.1","command":"PRIVMSG","rawCommand":"PRIVMSG","commandType":"normal","args":["#darqbot","^(caps (e yo))"],"server":{"name":"localhost","address":"localhost","port":6667},"author":{"name":"front","id":"ng6r6"},"type":"raw","result":"YO"}
 */
+
+  console.log('parseMessage:', message);
+
   try {
 
     message = JSON.parse(message);
@@ -142,6 +145,7 @@ var connectIrc = function() {
 
     server.irc.addListener('raw', (function(__server) {
       return function(message) {
+        console.log(message);
         appendMessage(message,__server);
         sendAll('raw',message);
       }
@@ -166,6 +170,7 @@ var init = function() {
   d = initDeps();
   c = initConf();
   c.net.sockets = [];
+
   initId();
 
   connectIrc();
