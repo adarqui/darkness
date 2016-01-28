@@ -2,6 +2,7 @@ package darkness_config
 
 type FrontConfig struct {
 	Author  AuthorConfig      `json:"author"`
+  Redis   RedisConfig       `json:"redis"`
 	Net     NetConfig         `json:"net"`
 	Servers map[string]IrcServerConfig `json:"servers"`
 }
@@ -10,8 +11,13 @@ type AuthorConfig struct {
 	Name    string            `json:"name"`
 }
 
+type RedisConfig struct {
+	RedisHost string `json:"host"`
+	RedisPort int    `json:"port"`
+}
+
 type NetConfig struct {
-	NetBind string `json:"host"`
+	NetHost string `json:"host"`
 	NetPort int    `json:"port"`
 }
 

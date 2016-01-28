@@ -1,0 +1,24 @@
+initial design:
+- just to get this thing moving
+
+front: (rename to relay eventually)
+- connects to irc server
+  - publishes connected event
+  - anything received on irc connection, send to IrcRecvCh
+  - anything received on IrcSendCh, send to irc connection
+
+- connects to redis server
+  - need two connections (one for pub, one for sub)
+  - anything received on redis connection, send to IrcSendCh
+  - anything received on IrcRecvCh, send to redis connection
+
+- send to redis connection:
+  - PUBLISH dbot:from_relay <message>
+
+- recv from redis connection:
+  - SUBSCRIBE dbot:from_tunnel
+
+rate limiting:
+- need a rate limiting channel for sending data to the irc server
+
+front just relays data.. so, the tunnel service will have to craft PRIVMSG and NICK messages etc..

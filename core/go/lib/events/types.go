@@ -6,7 +6,7 @@ const (
   EVENT_FRONT_CONNECTED = iota
   EVENT_TUNNEL_CONNECTED = iota
   EVENT_FRONT_RECEIVED_MESSAGE = iota
-  EVENT_TUNNEL_SEND_MESSAGE = iota
+  EVENT_TUNNEL_SENT_MESSAGE = iota
 )
 
 type Event struct {
