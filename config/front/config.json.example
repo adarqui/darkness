@@ -2,9 +2,13 @@
   "author" : {
   "name" : "front"
   },
+  "redis" : {
+    "host" : "localhost",
+    "port" : 6379
+  },
   "net" : {
-    "port" : 7654,
     "host" : "localhost"
+    "port" : 7654,
   },
   "servers" : {
     "localhost" : {
