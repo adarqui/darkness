@@ -1,7 +1,10 @@
 #!/bin/sh
 
 export NODE_PATH=`pwd`/../lib/
-
 export CONFIG=../../../../config/front/config.json
 
-node dbot_front.js
+if [ "$#" -eq 1 ] ; then
+  CONFIG="$1"
+fi
+
+node dbot_front.js "${CONFIG}"

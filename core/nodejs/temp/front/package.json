@@ -24,7 +24,8 @@
     "irc" : "*",
     "hiredis" : "*",
     "redis" : "*",
-    "randstring" : "*"
+    "randstring" : "*",
+    "uuid" : "*"
   },
   "license": "MIT",
   "engines": {
