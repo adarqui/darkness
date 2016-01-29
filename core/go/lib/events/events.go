@@ -7,6 +7,13 @@ func FrontConnected() Event {
   }
 }
 
+func FrontDisconnected() Event {
+  return Event {
+    EVENT_FRONT_DISCONNECTED,
+    []byte{},
+  }
+}
+
 func FrontReceivedMessage(v []byte) Event {
   return Event {
     EVENT_FRONT_RECEIVED_MESSAGE,
@@ -17,6 +24,13 @@ func FrontReceivedMessage(v []byte) Event {
 func TunnelConnected() Event {
   return Event {
     EVENT_TUNNEL_CONNECTED,
+    []byte{},
+  }
+}
+
+func TunnelDisconnected() Event {
+  return Event {
+    EVENT_TUNNEL_DISCONNECTED,
     []byte{},
   }
 }
