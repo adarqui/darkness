@@ -3,6 +3,7 @@
 var
   net = require('net'),
   uuid = require('uuid'),
+  darkness_redis = require('../lib/redis'),
   darkness_config = require('../lib/config'),
   darkness_events = require('../lib/events')
   ;
@@ -33,6 +34,7 @@ var Front = function() {
   var self = this;
 
   this.config = null;
+  this.uuid = uuid.v4();
 
   this.setConfig = function(config) {
     this.config = require(config);

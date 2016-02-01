@@ -576,13 +576,30 @@ var initRedis = function() {
     console.log("redis subscriber: Error:", err);
   });
 
+  console.log('subscribing');
+
   c.redis.sub.subscribe('dbot:reply', function(err,data) {
   })
 
+  c.redis.sub.subscribe('dbot:event', function(err,data) {
+  })
+
   c.redis.sub.on('message', function(channel,data) {
+    console.log('channel:', channel, 'data:', data);
     switch(channel) {
       case 'dbot:reply' : {
         subscriber_fns.dbot_reply(data);
+        break;
+      }
+      case 'dbot:event' : {
+        console.log('dbot:event');
+        var event = JSON.parse(data);
+        if (event.type == 2) {
+          console.log('connected');
+          c.redis.pub.publish('dbot:reply2', 'hi');
+        } else if (event.type == 3) {
+          console.log('disconnected');
+        }
         break;
       }
       default : {
@@ -728,6 +745,7 @@ var parseMessage = function(js, message) {
 }
 
 var initNet = function() {
+  /*
   c.net.chan = d.net.connect({
     host : c.net.host,
     port : c.net.port,
@@ -737,13 +755,14 @@ var initNet = function() {
 
   c.net.chan.on('data', function(data) {
     var message = data.toString();
+    console.log('message', message);
     parseIRC(message);
   });
 
   c.net.chan.on('end', function() {
     console.log("disconnected");
   });
-
+  */
 }
 
 
