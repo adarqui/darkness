@@ -1,0 +1,3 @@
+configs:
+- need to pull out repetitive config entries and place them into their own files, ie redis
+- modularize connection/redis stuff in core/go
