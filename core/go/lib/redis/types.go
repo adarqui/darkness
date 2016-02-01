@@ -15,3 +15,10 @@ type RESP_Writer struct {
 type RESP_Reader struct {
   *bufio.Reader
 }
+
+
+
+type RESP_ReadWriter struct {
+  *bufio.Reader
+  *bufio.Writer
+}

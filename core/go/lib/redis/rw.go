@@ -20,3 +20,12 @@ func NewReader(reader io.Reader) *RESP_Reader {
     Reader: bufio.NewReader(reader),
   }
 }
+
+
+
+func NewReadWriter(reader io.Reader, writer io.Writer) *RESP_ReadWriter {
+  return &RESP_ReadWriter{
+    Reader: bufio.NewReader(reader),
+    Writer: bufio.NewWriter(writer),
+  }
+}
