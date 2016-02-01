@@ -7,8 +7,14 @@
     "port" : 6379
   },
   "servers" : {
-    "localhost" : {
-      "label"        : "irc:localhost",
+    "localhost_1" : {
+      "label"        : "irc:localhost_1",
+      "host"         : "localhost",
+      "port"         : 6667,
+      "protocol"     : "irc"
+    },
+    "localhost_2" : {
+      "label"        : "irc:localhost_2",
       "host"         : "localhost",
       "port"         : 6667,
       "protocol"     : "irc"

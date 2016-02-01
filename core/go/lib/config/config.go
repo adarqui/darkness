@@ -5,19 +5,19 @@ import (
   "os"
 )
 
-func ParseConfig(path string) (FrontConfig, error) {
-  front_config := FrontConfig{}
+func ParseRelayConfig(path string) (RelayConfig, error) {
+  relay_config := RelayConfig{}
 
   conf, err := os.Open(path)
   if err != nil {
-    return front_config, err
+    return relay_config, err
   }
 
   json_parser := json.NewDecoder(conf)
-  err = json_parser.Decode(&front_config)
+  err = json_parser.Decode(&relay_config)
   if err != nil {
-    return front_config, err
+    return relay_config, err
   }
 
-  return front_config, nil
+  return relay_config, nil
 }

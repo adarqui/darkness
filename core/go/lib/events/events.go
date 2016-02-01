@@ -1,22 +1,22 @@
 package darkness_events
 
-func FrontConnected() Event {
+func RelayConnected() Event {
   return Event{
-    EVENT_FRONT_CONNECTED,
+    EVENT_RELAY_CONNECTED,
     []byte{},
   }
 }
 
-func FrontDisconnected() Event {
+func RelayDisconnected() Event {
   return Event{
-    EVENT_FRONT_DISCONNECTED,
+    EVENT_RELAY_DISCONNECTED,
     []byte{},
   }
 }
 
-func FrontReceivedMessage(v []byte) Event {
+func RelayReceivedMessage(v []byte) Event {
   return Event{
-    EVENT_FRONT_RECEIVED_MESSAGE,
+    EVENT_RELAY_RECEIVED_MESSAGE,
     v,
   }
 }
