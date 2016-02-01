@@ -1,4 +1,4 @@
 #!/bin/sh
 
 make
-./front ../../../config/front/config.json
+./relay ../../../config/relay/config.json

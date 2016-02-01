@@ -21,7 +21,7 @@ type Channels struct {
 }
 
 func usage() {
-  fmt.Println("usage: ./front <config_file>")
+  fmt.Println("usage: ./relay <config_file>")
   os.Exit(1)
 }
 
@@ -54,19 +54,19 @@ func makeChannels() Channels {
   }
 }
 
-func (channels Channels) ircLoop(front_config darkness_config.FrontConfig) {
+func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
   go func() {
     for {
       fmt.Println("irc loop")
       // temporary, refactor
-      for _, server := range front_config.Servers {
+      for _, server := range relay_config.Servers {
         log.Println(server)
         addr := fmt.Sprintf("%s:%d", server.Host, server.Port)
         conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
         if conn_err != nil {
         } else {
 
-          channels.IrcRecvCh <- darkness_events.FrontConnected()
+          channels.IrcRecvCh <- darkness_events.RelayConnected()
 
           var wg sync.WaitGroup
           wg.Add(1)
@@ -76,7 +76,7 @@ func (channels Channels) ircLoop(front_config darkness_config.FrontConfig) {
           wg.Wait()
           log.Println("ircLoop: after wg.Wait()")
 
-          channels.IrcRecvCh <- darkness_events.FrontDisconnected()
+          channels.IrcRecvCh <- darkness_events.RelayDisconnected()
 
         }
       }
@@ -107,17 +107,17 @@ func (channels Channels) ircLoopRecv(wg *sync.WaitGroup, conn net.Conn) {
         break
       }
       log.Printf("irc: %d %s\n", n, buf)
-      channels.IrcRecvCh <- darkness_events.FrontReceivedMessage(buf)
+      channels.IrcRecvCh <- darkness_events.RelayReceivedMessage(buf)
     }
   }()
 }
 
-func (channels Channels) redisPubLoop(front_config darkness_config.FrontConfig) {
+func (channels Channels) redisPubLoop(relay_config darkness_config.RelayConfig) {
   go func() {
     for {
       fmt.Println("redis loop")
       // temporary, refactor
-      redis := front_config.Redis
+      redis := relay_config.Redis
       log.Println(redis)
       addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
       conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
@@ -136,12 +136,12 @@ func (channels Channels) redisPubLoop(front_config darkness_config.FrontConfig) 
   }()
 }
 
-func (channels Channels) redisSubLoop(front_config darkness_config.FrontConfig) {
+func (channels Channels) redisSubLoop(relay_config darkness_config.RelayConfig) {
   go func() {
     for {
       fmt.Println("redis loop")
       // temporary, refactor
-      redis := front_config.Redis
+      redis := relay_config.Redis
       log.Println(redis)
       addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
       conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)

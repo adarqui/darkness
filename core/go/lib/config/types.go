@@ -1,6 +1,6 @@
 package darkness_config
 
-type FrontConfig struct {
+type RelayConfig struct {
   Author  AuthorConfig               `json:"author"`
   Redis   RedisConfig                `json:"redis"`
   Net     NetConfig                  `json:"net"`
