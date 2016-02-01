@@ -1,0 +1,16 @@
+{
+  "redis": {
+    "host" : "10.0.3.10",
+    "port" : 6379
+  },
+  "labels": {
+    "irc_1" : {
+      "nicks"    : ["dark_1_a", "dark_1_b"],
+      "channels" : ["#darkness", "#test"]
+    },
+    "irc_2" : {
+      "nicks"    : ["dark_2_a", "dark_2_b"],
+      "channels" : ["#darkness"]
+    }
+  }
+}

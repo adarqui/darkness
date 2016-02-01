@@ -19,21 +19,23 @@ import (
 
 
 type Channels struct {
-  WireSendCh chan AuthoredEvent
-  WireRecvCh chan AuthoredEvent
+  WireSendCh chan darkness_events.AuthoredEvent
+  WireRecvCh chan darkness_events.AuthoredEvent
 }
 
 
 
+/*
 type AuthoredEvent struct {
   Server darkness_config.ServerConfig
   Event darkness_events.Event
 }
+*/
 
 
 
 func usage() {
-  fmt.Println("usage: ./relay <config_file>")
+  fmt.Println("usage: ./dark_go_relay <config_file>")
   os.Exit(1)
 }
 
@@ -65,8 +67,8 @@ func main() {
 
 func makeChannels() Channels {
   return Channels{
-    make(chan AuthoredEvent),
-    make(chan AuthoredEvent),
+    make(chan darkness_events.AuthoredEvent),
+    make(chan darkness_events.AuthoredEvent),
   }
 }
 
@@ -84,7 +86,7 @@ func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
         if conn_err != nil {
         } else {
 
-          channels.WireRecvCh <- AuthoredEvent{server, darkness_events.RelayConnected()}
+          channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayConnected(0)}
 
           var wg sync.WaitGroup
           wg.Add(1)
@@ -94,7 +96,7 @@ func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
           wg.Wait()
           log.Println("ircLoop: after wg.Wait()")
 
-          channels.WireRecvCh <- AuthoredEvent{server, darkness_events.RelayDisconnected()}
+          channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayDisconnected(0)}
 
         }
       }
@@ -129,7 +131,7 @@ func (channels Channels) ircLoopRecv(wg *sync.WaitGroup, conn net.Conn, server d
         break
       }
       log.Printf("irc: %d %s\n", n, buf)
-      channels.WireRecvCh <- AuthoredEvent{server, darkness_events.RelayReceivedMessage(buf)}
+      channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayReceivedMessage(0, buf)}
     }
   }()
 }
@@ -197,8 +199,13 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, conn net.Conn) {
     for message := range channels.WireRecvCh {
       log.Println("redisPublishLoop", message)
 
-      n_incr, err_incr := darkness_redis.Incr(conn, "dark:counter")
+      n_incr, err_incr := darkness_redis.Incr(conn, darkness_keys.MkCounter(message.Server.Label))
       log.Println(n_incr, err_incr)
+      if err_incr != nil {
+        log.Println("redisPublishLoop: error: darkness_redis.Incr")
+        return
+      }
+      message.PatchId(n_incr)
 
       json, err := json.Marshal(message)
       if err != nil {

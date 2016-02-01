@@ -32,6 +32,17 @@ type IrcServerConfig struct {
   Channels []string `json:"channels"`
 }
 
+type IrcConnectedConfig struct {
+  Redis RedisConfig                `json:"redis"`
+  Labels map[string]IrcJoinConfig  `json:"labels"`
+}
+
+// eventually need to support nick registration, channel keys etc
+type IrcJoinConfig struct {
+  Nicks    []string `json:"nicks"`
+  Channels []string `json:"channels"`
+}
+
 type ServerConfig struct {
   Label string    `json:"label"`
   Host string     `json:"host"`

@@ -1,4 +1,4 @@
 #!/bin/sh
 
 make
-./relay ../../../config/relay/config.json
+./dark_go_relay ../../../config/relay/config.json

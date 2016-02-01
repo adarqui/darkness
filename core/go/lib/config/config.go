@@ -5,6 +5,10 @@ import (
   "os"
 )
 
+
+// TODO: support yaml & other config file types, modularize these functions since they are repetitive, etc.
+
+
 func ParseRelayConfig(path string) (RelayConfig, error) {
   relay_config := RelayConfig{}
 
@@ -20,4 +24,23 @@ func ParseRelayConfig(path string) (RelayConfig, error) {
   }
 
   return relay_config, nil
+}
+
+
+
+func ParseIrcConnectedConfig(path string) (IrcConnectedConfig, error) {
+  irc_connected_config := IrcConnectedConfig{}
+
+  conf, err := os.Open(path)
+  if err != nil {
+    return irc_connected_config, err
+  }
+
+  json_parser := json.NewDecoder(conf)
+  err = json_parser.Decode(&irc_connected_config)
+  if err != nil {
+    return irc_connected_config, err
+  }
+
+  return irc_connected_config, nil
 }
