@@ -4,7 +4,8 @@ type RelayConfig struct {
   Author  AuthorConfig               `json:"author"`
   Redis   RedisConfig                `json:"redis"`
   Net     NetConfig                  `json:"net"`
-  Servers map[string]ServerConfig    `json:"servers"`
+  Servers []ServerConfig             `json:"servers"`
+//  Servers map[string]ServerConfig    `json:"servers"`
 //  Servers map[string]IrcServerConfig `json:"servers"`
 }
 

@@ -19,10 +19,6 @@ import (
 
 
 type Channels struct {
-  /*
-  WireSendCh chan darkness_events.Event
-  WireRecvCh chan darkness_events.Event
-  */
   WireSendCh chan AuthoredEvent
   WireRecvCh chan AuthoredEvent
 }
@@ -71,10 +67,6 @@ func makeChannels() Channels {
   return Channels{
     make(chan AuthoredEvent),
     make(chan AuthoredEvent),
-    /*
-    make(chan darkness_events.Event),
-    make(chan darkness_events.Event),
-    */
   }
 }
 
