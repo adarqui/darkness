@@ -75,11 +75,12 @@ func (channels Channels) redisPubLoop(irc_connected_config darkness_config.IrcCo
       if conn_err != nil {
       } else {
 
+        rw := darkness_redis.NewReadWriter(conn, conn)
         log.Println("redis: connected")
 
         var wg sync.WaitGroup
         wg.Add(1)
-        channels.redisPublishLoop(&wg, conn)
+        channels.redisPublishLoop(&wg, rw)
         wg.Wait()
       }
       time.Sleep(1 * time.Second)
@@ -101,11 +102,13 @@ func (channels Channels) redisSubLoop(irc_connected_config darkness_config.IrcCo
       if conn_err != nil {
       } else {
 
+        rw := darkness_redis.NewReadWriter(conn, conn)
+
         log.Println("redis: connected")
 
         var wg sync.WaitGroup
         wg.Add(1)
-        channels.redisSubscribeLoop(&wg, conn)
+        channels.redisSubscribeLoop(&wg, rw)
         wg.Wait()
       }
       time.Sleep(1 * time.Second)
@@ -118,13 +121,13 @@ func (channels Channels) redisSubLoop(irc_connected_config darkness_config.IrcCo
 /*
  * Publish events that we receive from the irc server
  */
-func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, conn net.Conn) {
+func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
   go func() {
     defer wg.Done()
     for message := range channels.WireRecvCh {
       log.Println("redisPublishLoop", message)
 
-      n_incr, err_incr := darkness_redis.Incr(conn, darkness_keys.MkCounter(message.Server.Label))
+      n_incr, err_incr := rw.Incr(darkness_keys.MkCounter(message.Server.Label))
       log.Println(n_incr, err_incr)
       if err_incr != nil {
         log.Println("redisPublishLoop: error: darkness_redis.Incr")
@@ -136,7 +139,7 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, conn net.Conn) {
       if err != nil {
         continue
       }
-      n_pub, err_pub := darkness_redis.Publish(conn, darkness_keys.MkEvent(), json)
+      n_pub, err_pub := rw.Publish(darkness_keys.MkEvent(), json)
       log.Println(n_pub, err_pub)
     }
   }()
@@ -147,15 +150,15 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, conn net.Conn) {
 /*
  * Subscribe to events that we received from redis
  */
-func (channels Channels) redisSubscribeLoop(wg *sync.WaitGroup, conn net.Conn) {
+func (channels Channels) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
   go func() {
     defer wg.Done()
-    n, buf, err := darkness_redis.Subscribe(conn, darkness_keys.MkEvent())
+    n, buf, err := rw.Subscribe(darkness_keys.MkEvent())
     log.Println(n, buf, err)
     for {
 //      buf := make([]byte, 512)
 //      n, err := conn.Read(buf)
-      response, err := darkness_redis.SubscribeMessage(conn, darkness_keys.MkEvent())
+      response, err := rw.SubscribeMessage(darkness_keys.MkEvent())
       log.Println(response, err)
     }
   }()

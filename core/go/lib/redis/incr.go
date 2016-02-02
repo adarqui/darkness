@@ -2,7 +2,6 @@ package darkness_redis
 
 import (
   "fmt"
-  "net"
   "log"
   "errors"
   "strconv"
@@ -13,14 +12,15 @@ import (
 /*
  * Incr
  */
-func Incr(conn net.Conn, key string) (int64, error) {
+func (rw *RESP_ReadWriter) Incr(key string) (int64, error) {
 
   buf := make([]byte, 512)
 
   request := fmt.Sprintf("*2\r\n$4\r\nINCR\r\n$%d\r\n%s\r\n", len(key), key)
-  conn.Write([]byte(request))
+  rw.Write([]byte(request))
+  rw.Flush()
 
-  n, err := conn.Read(buf)
+  n, err := rw.Read(buf)
   if err != nil {
     return 0, err
   }
@@ -34,10 +34,26 @@ func Incr(conn net.Conn, key string) (int64, error) {
   /*
    * 1:n-2 = :<value>\r\n
    */
+/*
   response, err := strconv.ParseInt(string(buf[1:(n-2)]), 10, 64)
   if err != nil {
     return 0, err
   }
+  */
+  _, err = rw.ReadBytes(':')
+  if err != nil {
+    return 0, err
+  }
 
-  return response, nil
+  response, _, err := rw.ReadLine()
+  if err != nil {
+    return 0, err
+  }
+
+  response_int, err := strconv.ParseInt(string(response), 10, 64)
+  if err != nil {
+    return 0, err
+  }
+
+  return response_int, nil
 }

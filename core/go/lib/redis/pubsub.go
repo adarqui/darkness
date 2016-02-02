@@ -2,7 +2,6 @@ package darkness_redis
 
 import (
   "fmt"
-  "net"
   "log"
   "errors"
   "strconv"
@@ -14,7 +13,7 @@ import (
 /*
  * Publish
  */
-func Publish(conn net.Conn, key string, payload []byte) (int, error) {
+func (rw *RESP_ReadWriter) Publish(key string, payload []byte) (int, error) {
   /*
      *3
      $7
@@ -27,9 +26,10 @@ func Publish(conn net.Conn, key string, payload []byte) (int, error) {
   buf := make([]byte, 512)
 
   request := fmt.Sprintf("*3\r\n$7\r\nPUBLISH\r\n$%d\r\n%s\r\n$%d\r\n%s\r\n", len(key), key, len(payload), string(payload))
-  conn.Write([]byte(request))
+  rw.Write([]byte(request))
+  rw.Flush()
 
-  n, err := conn.Read(buf);
+  n, err := rw.Read(buf);
   if err != nil {
     return 0, err
   }
@@ -44,7 +44,7 @@ func Publish(conn net.Conn, key string, payload []byte) (int, error) {
 /*
  * Subscribe
  */
-func Subscribe(conn net.Conn, key string) (int, []byte, error) {
+func (rw *RESP_ReadWriter) Subscribe(key string) (int, []byte, error) {
   /*
      *2
      $9
@@ -58,9 +58,10 @@ func Subscribe(conn net.Conn, key string) (int, []byte, error) {
   buf := make([]byte, 512)
 
   request := fmt.Sprintf("*2\r\n$9\r\nSUBSCRIBE\r\n$%d\r\n%s\r\n", len(key), key)
-  conn.Write([]byte(request))
+  rw.Write([]byte(request))
+  rw.Flush()
 
-  n, err := conn.Read(buf);
+  n, err := rw.Read(buf);
   if err != nil {
     return 0, nil, err
   }
@@ -75,10 +76,10 @@ func Subscribe(conn net.Conn, key string) (int, []byte, error) {
 /*
  * SubscribeMessage
  */
-func SubscribeMessage(conn net.Conn, key string) ([]byte, error) {
+func (rw *RESP_ReadWriter) SubscribeMessage(key string) ([]byte, error) {
   buf := make([]byte, 512)
 
-  _, err := conn.Read(buf)
+  _, err := rw.Read(buf)
   if err != nil {
     return nil, err
   }
