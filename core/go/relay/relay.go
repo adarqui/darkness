@@ -1,8 +1,6 @@
 package main
 
 import (
-//  "bufio"
-//  "bytes"
   "encoding/json"
   "fmt"
   "github.com/adarqui/darkness/core/go/lib/config"
@@ -23,15 +21,6 @@ type Channels struct {
   WireSendCh chan darkness_events.AuthoredEvent
   WireRecvCh chan darkness_events.AuthoredEvent
 }
-
-
-
-/*
-type AuthoredEvent struct {
-  Server darkness_config.ServerConfig
-  Event darkness_events.Event
-}
-*/
 
 
 
@@ -100,6 +89,7 @@ func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
           log.Println("ircLoop: after wg.Wait()")
 
           channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayDisconnected(0)}
+          log.Println("after disconnected event")
 
         }
       }
@@ -169,6 +159,7 @@ func (channels Channels) redisPubLoop(relay_config darkness_config.RelayConfig) 
         wg.Add(1)
         channels.redisPublishLoop(&wg, rw)
         wg.Wait()
+        log.Println("redisPublishLoop: after wg.Wait()")
       }
       time.Sleep(1 * time.Second)
     }
@@ -197,6 +188,7 @@ func (channels Channels) redisSubLoop(relay_config darkness_config.RelayConfig) 
         wg.Add(1)
         channels.redisSubscribeLoop(&wg, rw)
         wg.Wait()
+        log.Println("redisSubLoop: after wg.Wait()")
       }
       time.Sleep(1 * time.Second)
     }
@@ -210,7 +202,6 @@ func (channels Channels) redisSubLoop(relay_config darkness_config.RelayConfig) 
  */
 func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
 
-
   go func() {
     defer wg.Done()
     for message := range channels.WireRecvCh {
@@ -222,6 +213,7 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis
         log.Println("redisPublishLoop: error: darkness_redis.Incr")
         return
       }
+
       message.PatchId(n_incr)
 
       json, err := json.Marshal(message)
