@@ -3,9 +3,9 @@ package darkness_redis
 import (
   "fmt"
   "log"
-  "errors"
+//  "errors"
   "strconv"
-  "bytes"
+//  "bytes"
 )
 
 
@@ -75,14 +75,10 @@ func (rw *RESP_ReadWriter) Subscribe(key string) (int, []byte, error) {
 
 /*
  * SubscribeMessage
+ *
+ * returns: key_name, message
  */
-func (rw *RESP_ReadWriter) SubscribeMessage(key string) ([]byte, error) {
-  buf := make([]byte, 512)
-
-  _, err := rw.Read(buf)
-  if err != nil {
-    return nil, err
-  }
+func (rw *RESP_ReadWriter) SubscribeMessage(key string) ([]byte, []byte, error) {
 
   /*
    *3
@@ -94,17 +90,99 @@ func (rw *RESP_ReadWriter) SubscribeMessage(key string) ([]byte, error) {
    <message>
    */
 
-   log.Println(string(buf))
-
-   if bytes.HasPrefix(buf, []byte("*3\r\n$7\r\nmessage\r\n")) == false {
-     return nil, errors.New("unknown response")
-   }
-
-   message_len, err := strconv.ParseInt(string(bytes.Trim(buf[16:], "\r\n")), 10, 64)
+   /*
+      *3
+    */
+   _, _, err := rw.ReadLine()
    if err != nil {
-     return nil, err
+     return nil, nil, err
    }
 
-   log.Println(message_len)
-   return nil, nil
+   /*
+      $7
+      message
+    */
+   _, err = rw.ReadBytes('$')
+   if err != nil {
+     return nil, nil, err
+   }
+
+   len_static_string_s, _, err := rw.ReadLine()
+   if err != nil {
+     return nil, nil, err
+   }
+
+   len_static_string, err := strconv.ParseInt(string(len_static_string_s), 10, 64)
+   if err != nil {
+     return nil, nil, err
+   }
+   static_string := make([]byte, len_static_string)
+   _, err = rw.Read(static_string)
+   if err != nil {
+     return nil, nil, err
+   }
+   _, _, err = rw.ReadLine()
+   if err != nil {
+     return nil, nil, err
+   }
+
+   /*
+      $<key_length>
+      $<key>
+    */
+   _, err = rw.ReadBytes('$')
+   if err != nil {
+     return nil, nil, err
+   }
+
+   len_sub_key_s, _, err := rw.ReadLine()
+   if err != nil {
+     return nil, nil, err
+   }
+
+   len_sub_key, err := strconv.ParseInt(string(len_sub_key_s), 10, 64)
+   if err != nil {
+     return nil, nil, err
+   }
+   sub_key := make([]byte, len_sub_key)
+   _, err = rw.Read(sub_key)
+   if err != nil {
+     return nil, nil, err
+   }
+   _, _, err = rw.ReadLine()
+   if err != nil {
+     return nil, nil, err
+   }
+
+   /*
+      $<message_length>
+      $<message>
+    */
+   _, err = rw.ReadBytes('$')
+   if err != nil {
+     return nil, nil, err
+   }
+   len_message_s, _, err := rw.ReadLine()
+   if err != nil {
+     return nil, nil, err
+   }
+   len_message, err := strconv.ParseInt(string(len_message_s), 10, 64)
+   if err != nil {
+     return nil, nil, err
+   }
+   message := make([]byte, len_message)
+   _, err = rw.Read(message)
+   if err != nil {
+     return nil, nil, err
+   }
+
+   /*
+      \r\n
+    */
+   _, _, err = rw.ReadLine()
+   if err != nil {
+     return nil, nil, err
+   }
+
+   return sub_key, message, nil
 }

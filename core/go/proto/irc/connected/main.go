@@ -153,13 +153,16 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis
 func (channels Channels) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
   go func() {
     defer wg.Done()
-    n, buf, err := rw.Subscribe(darkness_keys.MkEvent())
-    log.Println(n, buf, err)
+    _, _, err := rw.Subscribe(darkness_keys.MkEvent())
+    if err != nil {
+      return
+    }
     for {
-//      buf := make([]byte, 512)
-//      n, err := conn.Read(buf)
-      response, err := rw.SubscribeMessage(darkness_keys.MkEvent())
-      log.Println(response, err)
+      response_key, response_message, err := rw.SubscribeMessage(darkness_keys.MkEvent())
+      if err != nil {
+        return
+      }
+      log.Println("RESPONSE:", string(response_key), string(response_message), err)
     }
   }()
 }
