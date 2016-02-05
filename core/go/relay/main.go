@@ -2,8 +2,9 @@ package main
 
 import (
   "github.com/adarqui/darkness/core/go/lib/config"
-  "os"
+  "github.com/adarqui/darkness/core/go/lib/log"
   "log"
+  "os"
   "sync"
 )
 
@@ -14,12 +15,12 @@ func main() {
   if len(args) < 2 {
     usage()
   }
+  darkness_log.InitLog()
   conf, err := darkness_config.ParseRelayConfig(args[1])
   if err != nil {
     log.Fatal(err)
   }
 
-  log.Println(conf)
   var wg sync.WaitGroup
   wg.Add(1)
   loop(conf)

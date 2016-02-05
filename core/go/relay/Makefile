@@ -3,3 +3,4 @@ all:
 
 deps:
 	go get github.com/satori/go.uuid
+	go get github.com/op/go-logging

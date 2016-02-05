@@ -17,7 +17,7 @@ func makePubState() PubState {
 func makeConnectionState() ConnectionState {
   return ConnectionState{
     make(chan darkness_events.AuthoredEvent),
-    make(chan darkness_events.AuthoredEvent),
+//    make(chan darkness_events.AuthoredEvent),
   }
 }
 

@@ -2,7 +2,7 @@ package darkness_redis
 
 import (
   "fmt"
-  "log"
+//  "log"
 //  "errors"
   "strconv"
 //  "bytes"
@@ -34,7 +34,7 @@ func (rw *RESP_ReadWriter) Publish(key string, payload []byte) (int, error) {
     return 0, err
   }
 
-  log.Println(string(buf))
+//  log.Println(string(buf))
 
   return n, nil
 }
@@ -66,7 +66,7 @@ func (rw *RESP_ReadWriter) Subscribe(key string) (int, []byte, error) {
     return 0, nil, err
   }
 
-  log.Println(string(buf))
+//  log.Println(string(buf))
 
   return n, buf, nil
 }

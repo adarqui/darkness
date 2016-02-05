@@ -14,7 +14,7 @@ type PubState struct {
 
 type ConnectionState struct {
   WireSendCh chan darkness_events.AuthoredEvent
-  WireRecvCh chan darkness_events.AuthoredEvent
+//  WireRecvCh chan darkness_events.AuthoredEvent
 }
 
 
