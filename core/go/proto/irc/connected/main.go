@@ -143,7 +143,7 @@ func (state State) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_
         continue
       }
 
-      n_pub, err_pub := rw.Publish(darkness_keys.MkRelay(), json)
+      n_pub, err_pub := rw.Publish(darkness_keys.MkRelayServer(message.Server.Label), json)
       log.Println(n_pub, err_pub)
     }
   }()
@@ -203,8 +203,11 @@ func (state State) handleDarkEvent(response_message []byte) {
     return
   }
   */
-  state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte("NICK test\r\n"))}
+  state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte(fmt.Sprintf("NICK %s\r\n", v.Nicks[0])))}
 
   // publish user
   state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte("USER test 0 * :Real Name\r\n"))}
+
+  state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte(fmt.Sprintf("JOIN %s\r\n", v.Channels[0])))}
+
 }

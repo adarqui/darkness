@@ -37,3 +37,12 @@ func MkEvent () string {
 func MkRelay() string {
   return DARK_RELAY
 }
+
+
+
+/*
+* DARK_RELAY:<SERVER>
+ */
+func MkRelayServer(key string) string {
+  return DARK_RELAY + ":" + key
+}

@@ -47,6 +47,7 @@ type IrcJoinConfig struct {
 }
 
 type ServerConfig struct {
+  Session string  `json:"ses,omitempty"`
   Label string    `json:"label"`
   Host string     `json:"host"`
   Port int        `json:"port"`
