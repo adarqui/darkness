@@ -2,6 +2,26 @@ package darkness_events
 
 
 
+func MkNop() Event {
+  return Event{
+    0,
+    EVENT_NOP,
+    []byte{},
+  }
+}
+
+
+
+func MkDie() Event {
+  return Event{
+    0,
+    EVENT_NOP,
+    []byte{},
+  }
+}
+
+
+
 func RelayConnected(id int64) Event {
   return Event{
     id,
