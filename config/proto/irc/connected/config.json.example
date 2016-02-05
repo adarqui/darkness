@@ -5,11 +5,17 @@
   },
   "labels": {
     "irc_1" : {
-      "nicks"    : ["dark_1_a", "dark_1_b"],
-      "channels" : ["#darkness", "#test"]
+      "nicks"     : ["dark_1_a", "dark_1_b"],
+      "user_name" : "user_name",
+      "user_mode" : 0,
+      "real_name" : "Real Name",
+      "channels"  : ["#darkness", "#test"]
     },
     "irc_2" : {
       "nicks"    : ["dark_2_a", "dark_2_b"],
+      "user_name" : "user_name 2",
+      "user_mode" : 0,
+      "real_name" : "Real Name 2",
       "channels" : ["#darkness"]
     }
   }

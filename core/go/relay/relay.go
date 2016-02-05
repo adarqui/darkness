@@ -17,7 +17,7 @@ import (
 
 
 
-type Channels struct {
+type State struct {
   WireSendCh chan darkness_events.AuthoredEvent
   WireRecvCh chan darkness_events.AuthoredEvent
 }
@@ -46,17 +46,17 @@ func main() {
   log.Println(conf)
   var wg sync.WaitGroup
   wg.Add(1)
-  channels := makeChannels()
-  channels.redisPubLoop(conf)
-  channels.redisSubLoop(conf)
-  channels.ircLoop(conf)
+  state := makeState()
+  state.redisPubLoop(conf)
+  state.redisSubLoop(conf)
+  state.ircLoop(conf)
   wg.Wait()
 }
 
 
 
-func makeChannels() Channels {
-  return Channels{
+func makeState() State {
+  return State{
     make(chan darkness_events.AuthoredEvent),
     make(chan darkness_events.AuthoredEvent),
   }
@@ -64,7 +64,7 @@ func makeChannels() Channels {
 
 
 
-func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
+func (state State) ircLoop(relay_config darkness_config.RelayConfig) {
   go func() {
     for {
       fmt.Println("irc loop")
@@ -78,17 +78,17 @@ func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
 
           rw := darkness_redis.NewReadWriter(conn, conn)
 
-          channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayConnected(0)}
+          state.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayConnected(0)}
 
           var wg sync.WaitGroup
           wg.Add(1)
           fmt.Println("connected")
-          channels.ircLoopSend(&wg, rw, server)
-          channels.ircLoopRecv(&wg, rw, server)
+          state.ircLoopSend(&wg, rw, server)
+          state.ircLoopRecv(&wg, rw, server)
           wg.Wait()
           log.Println("ircLoop: after wg.Wait()")
 
-          channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayDisconnected(0)}
+          state.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayDisconnected(0)}
           log.Println("after disconnected event")
 
         }
@@ -100,11 +100,11 @@ func (channels Channels) ircLoop(relay_config darkness_config.RelayConfig) {
 
 
 
-func (channels Channels) ircLoopSend(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter, server darkness_config.ServerConfig) {
+func (state State) ircLoopSend(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter, server darkness_config.ServerConfig) {
   go func() {
     defer wg.Done()
     for {
-      event := <-channels.WireSendCh
+      event := <-state.WireSendCh
       log.Println(event)
     }
   }()
@@ -112,7 +112,7 @@ func (channels Channels) ircLoopSend(wg *sync.WaitGroup, rw *darkness_redis.RESP
 
 
 
-func (channels Channels) ircLoopRecv(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter, server darkness_config.ServerConfig) {
+func (state State) ircLoopRecv(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter, server darkness_config.ServerConfig) {
   go func() {
     defer wg.Done()
     buf := make([]byte, 512)
@@ -132,14 +132,14 @@ func (channels Channels) ircLoopRecv(wg *sync.WaitGroup, rw *darkness_redis.RESP
         break
       }
       log.Println("ircLoopRecv: %d %s\n", read_n, buf)
-      channels.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayReceivedMessage(0, buf)}
+      state.WireRecvCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayReceivedMessage(0, buf)}
     }
   }()
 }
 
 
 
-func (channels Channels) redisPubLoop(relay_config darkness_config.RelayConfig) {
+func (state State) redisPubLoop(relay_config darkness_config.RelayConfig) {
   go func() {
     for {
       fmt.Println("redis loop")
@@ -157,7 +157,7 @@ func (channels Channels) redisPubLoop(relay_config darkness_config.RelayConfig) 
 
         var wg sync.WaitGroup
         wg.Add(1)
-        channels.redisPublishLoop(&wg, rw)
+        state.redisPublishLoop(&wg, rw)
         wg.Wait()
         log.Println("redisPublishLoop: after wg.Wait()")
       }
@@ -168,7 +168,7 @@ func (channels Channels) redisPubLoop(relay_config darkness_config.RelayConfig) 
 
 
 
-func (channels Channels) redisSubLoop(relay_config darkness_config.RelayConfig) {
+func (state State) redisSubLoop(relay_config darkness_config.RelayConfig) {
   go func() {
     for {
       fmt.Println("redis loop")
@@ -186,7 +186,7 @@ func (channels Channels) redisSubLoop(relay_config darkness_config.RelayConfig) 
 
         var wg sync.WaitGroup
         wg.Add(1)
-        channels.redisSubscribeLoop(&wg, rw)
+        state.redisSubscribeLoop(&wg, rw)
         wg.Wait()
         log.Println("redisSubLoop: after wg.Wait()")
       }
@@ -200,11 +200,11 @@ func (channels Channels) redisSubLoop(relay_config darkness_config.RelayConfig) 
 /*
  * Publish events that we receive from the irc server
  */
-func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
+func (state State) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
 
   go func() {
     defer wg.Done()
-    for message := range channels.WireRecvCh {
+    for message := range state.WireRecvCh {
       log.Println("redisPublishLoop", message)
 
       n_incr, err_incr := rw.Incr(darkness_keys.MkCounter(message.Server.Label))
@@ -231,24 +231,38 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis
 /*
  * Subscribe to events that we received from redis, which are generated by tunnels
  */
-func (channels Channels) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
-  go func() {
-    defer wg.Done()
-    buf := make([]byte, 512)
-    for {
-      /*
-      n, read_err := bufio.NewReader(conn).Read(buf)
-      if read_err != nil {
-        break
-      }
-      log.Printf("redis: %d %s\n", n, buf)
-      */
-      read_n, read_err := rw.Read(buf)
-      if read_err != nil {
-        break
-      }
-      log.Printf("redis: %d %s\n", read_n, buf)
-      //   channels.WireRecvCh <- darkness_events.TunnelSentMessage(buf)
-    }
-  }()
+func (state State) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
+   go func() {
+     defer wg.Done()
+     _, _, err := rw.Subscribe(darkness_keys.MkRelay())
+     if err != nil {
+       return
+     }
+     for {
+       response_key, response_message, err := rw.SubscribeMessage(darkness_keys.MkRelay())
+       if err != nil {
+         return
+       }
+       log.Println("RESPONSE:", string(response_key), string(response_message), err)
+       switch string(response_key) {
+         case "dark:relay":
+           state.handleDarkRelay(response_message)
+         default:
+           break
+       }
+     }
+   }()
+}
+
+
+
+func (state State) handleDarkRelay(response_message []byte) {
+  var ev darkness_events.AuthoredEvent
+  var err error
+  err = json.Unmarshal(response_message, &ev)
+  if err != nil {
+    log.Println("handleDarkRelay", err)
+    return
+  }
+  log.Println("dark event", ev, string(ev.Event.Payload))
 }

@@ -3,8 +3,13 @@ package darkness_keys
 import (
 )
 
-const DARK_COUNTER = "dark:counter"
-const DARK_EVENT   = "dark:event"
+
+
+const (
+  DARK_COUNTER = "dark:counter"
+  DARK_EVENT   = "dark:event"
+  DARK_RELAY   = "dark:relay"
+)
 
 
 
@@ -22,4 +27,13 @@ func MkCounter (key string) string {
  */
 func MkEvent () string {
   return DARK_EVENT
+}
+
+
+
+/*
+ * DARK_RELAY
+ */
+func MkRelay() string {
+  return DARK_RELAY
 }

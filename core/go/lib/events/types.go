@@ -30,6 +30,7 @@ const (
   EVENT_TUNNEL_DISCONNECTED    = "tunnel_disconnected"
   EVENT_RELAY_RECEIVED_MESSAGE = "relay_received_message"
   EVENT_TUNNEL_SENT_MESSAGE    = "tunnel_sent_message"
+  EVENT_RAW                    = "raw"
 )
 
 
@@ -43,6 +44,6 @@ type Event struct {
 
 
 type AuthoredEvent struct {
-  Server darkness_config.ServerConfig
-  Event Event
+  Server darkness_config.ServerConfig `json:"server"`
+  Event Event                         `json:"event"`
 }

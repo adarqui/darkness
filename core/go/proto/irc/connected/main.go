@@ -17,9 +17,10 @@ import (
 
 
 
-type Channels struct {
+type State struct {
   WireSendCh chan darkness_events.AuthoredEvent
   WireRecvCh chan darkness_events.AuthoredEvent
+  Config darkness_config.IrcConnectedConfig
 }
 
 
@@ -46,24 +47,25 @@ func main() {
   log.Println(conf)
   var wg sync.WaitGroup
   wg.Add(1)
-  channels := makeChannels()
-  channels.redisPubLoop(conf)
-  channels.redisSubLoop(conf)
+  state := makeState(conf)
+  state.redisPubLoop(conf)
+  state.redisSubLoop(conf)
   wg.Wait()
 }
 
 
 
-func makeChannels() Channels {
-  return Channels{
+func makeState(conf darkness_config.IrcConnectedConfig) State {
+  return State{
     make(chan darkness_events.AuthoredEvent),
     make(chan darkness_events.AuthoredEvent),
+    conf,
   }
 }
 
 
 
-func (channels Channels) redisPubLoop(irc_connected_config darkness_config.IrcConnectedConfig) {
+func (state State) redisPubLoop(irc_connected_config darkness_config.IrcConnectedConfig) {
   go func() {
     for {
       fmt.Println("redis loop")
@@ -80,7 +82,7 @@ func (channels Channels) redisPubLoop(irc_connected_config darkness_config.IrcCo
 
         var wg sync.WaitGroup
         wg.Add(1)
-        channels.redisPublishLoop(&wg, rw)
+        state.redisPublishLoop(&wg, rw)
         wg.Wait()
       }
       time.Sleep(1 * time.Second)
@@ -90,7 +92,7 @@ func (channels Channels) redisPubLoop(irc_connected_config darkness_config.IrcCo
 
 
 
-func (channels Channels) redisSubLoop(irc_connected_config darkness_config.IrcConnectedConfig) {
+func (state State) redisSubLoop(irc_connected_config darkness_config.IrcConnectedConfig) {
   go func() {
     for {
       fmt.Println("redis loop")
@@ -108,7 +110,7 @@ func (channels Channels) redisSubLoop(irc_connected_config darkness_config.IrcCo
 
         var wg sync.WaitGroup
         wg.Add(1)
-        channels.redisSubscribeLoop(&wg, rw)
+        state.redisSubscribeLoop(&wg, rw)
         wg.Wait()
       }
       time.Sleep(1 * time.Second)
@@ -119,12 +121,12 @@ func (channels Channels) redisSubLoop(irc_connected_config darkness_config.IrcCo
 
 
 /*
- * Publish events that we receive from the irc server
+ * Publish events to the relay
  */
-func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
+func (state State) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
   go func() {
     defer wg.Done()
-    for message := range channels.WireRecvCh {
+    for message := range state.WireRecvCh {
       log.Println("redisPublishLoop", message)
 
       n_incr, err_incr := rw.Incr(darkness_keys.MkCounter(message.Server.Label))
@@ -133,13 +135,15 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis
         log.Println("redisPublishLoop: error: darkness_redis.Incr")
         return
       }
+
       message.PatchId(n_incr)
 
       json, err := json.Marshal(message)
       if err != nil {
         continue
       }
-      n_pub, err_pub := rw.Publish(darkness_keys.MkEvent(), json)
+
+      n_pub, err_pub := rw.Publish(darkness_keys.MkRelay(), json)
       log.Println(n_pub, err_pub)
     }
   }()
@@ -150,7 +154,7 @@ func (channels Channels) redisPublishLoop(wg *sync.WaitGroup, rw *darkness_redis
 /*
  * Subscribe to events that we received from redis
  */
-func (channels Channels) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
+func (state State) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter) {
   go func() {
     defer wg.Done()
     _, _, err := rw.Subscribe(darkness_keys.MkEvent())
@@ -163,6 +167,44 @@ func (channels Channels) redisSubscribeLoop(wg *sync.WaitGroup, rw *darkness_red
         return
       }
       log.Println("RESPONSE:", string(response_key), string(response_message), err)
+      switch string(response_key) {
+        case "dark:event":
+          state.handleDarkEvent(response_message)
+        default:
+          break
+      }
     }
   }()
+}
+
+
+
+func (state State) handleDarkEvent(response_message []byte) {
+  var ev darkness_events.AuthoredEvent
+  var err error
+  err = json.Unmarshal(response_message, &ev)
+  if err != nil {
+    log.Println("handleDarkEvent", err)
+    return
+  }
+  log.Println("dark event", ev)
+  /*
+   * look for the label within the config in State, if found, publish some stuff to the relay to forward to the irc server
+   */
+  v, ok := state.Config.Labels[ev.Server.Label]
+  if !ok {
+    log.Println("not found")
+  }
+  log.Println(v)
+  // publish nick
+  /*
+  json_nick, err := json.Marshal(darkness_events.Raw(0, []byte("NICK test\r\n")))
+  if err != nil {
+    return
+  }
+  */
+  state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte("NICK test\r\n"))}
+
+  // publish user
+  state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte("USER test 0 * :Real Name\r\n"))}
 }

@@ -1,5 +1,7 @@
 package darkness_events
 
+
+
 func RelayConnected(id int64) Event {
   return Event{
     id,
@@ -7,6 +9,8 @@ func RelayConnected(id int64) Event {
     []byte{},
   }
 }
+
+
 
 func RelayDisconnected(id int64) Event {
   return Event{
@@ -16,6 +20,8 @@ func RelayDisconnected(id int64) Event {
   }
 }
 
+
+
 func RelayReceivedMessage(id int64, v []byte) Event {
   return Event{
     id,
@@ -23,6 +29,8 @@ func RelayReceivedMessage(id int64, v []byte) Event {
     v,
   }
 }
+
+
 
 func TunnelConnected(id int64) Event {
   return Event{
@@ -32,6 +40,8 @@ func TunnelConnected(id int64) Event {
   }
 }
 
+
+
 func TunnelDisconnected(id int64) Event {
   return Event{
     id,
@@ -40,6 +50,8 @@ func TunnelDisconnected(id int64) Event {
   }
 }
 
+
+
 func TunnelSentMessage(id int64, v []byte) Event {
   return Event{
     id,
@@ -47,3 +59,14 @@ func TunnelSentMessage(id int64, v []byte) Event {
     v,
   }
 }
+
+
+
+func Raw(id int64, message []byte) Event {
+  return Event{
+    id,
+    EVENT_RAW,
+    message,
+  }
+}
+

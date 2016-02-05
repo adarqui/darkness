@@ -40,6 +40,9 @@ type IrcConnectedConfig struct {
 // eventually need to support nick registration, channel keys etc
 type IrcJoinConfig struct {
   Nicks    []string `json:"nicks"`
+  UserName string   `json:"user_name"`
+  UserMode int      `json:"user_mode"`
+  RealName string   `json:"real_name"`
   Channels []string `json:"channels"`
 }
 
