@@ -44,3 +44,22 @@ func ParseIrcConnectedConfig(path string) (IrcConnectedConfig, error) {
 
   return irc_connected_config, nil
 }
+
+
+
+func ParseRedisFileConfig(path string) (RedisFileConfig, error) {
+  redis_file_config := RedisFileConfig{}
+
+  conf, err := os.Open(path)
+  if err != nil {
+    return redis_file_config, err
+  }
+
+  json_parser := json.NewDecoder(conf)
+  err = json_parser.Decode(&redis_file_config)
+  if err != nil {
+    return redis_file_config, err
+  }
+
+  return redis_file_config, nil
+}

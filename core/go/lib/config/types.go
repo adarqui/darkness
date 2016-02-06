@@ -18,6 +18,10 @@ type RedisConfig struct {
   RedisPort int    `json:"port"`
 }
 
+type RedisFileConfig struct {
+  Redis RedisConfig `json:"redis"`
+}
+
 type NetConfig struct {
   NetHost string `json:"host"`
   NetPort int    `json:"port"`

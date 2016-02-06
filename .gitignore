@@ -4,4 +4,5 @@ node_modules
 c
 *.so
 config.json
+redis.json
 config.js

@@ -46,8 +46,10 @@ func (server_state ServerState) loopServer(relay_config darkness_config.RelayCon
 
 
 func (server_state ServerState) ircLoop(server darkness_config.ServerConfig) {
+
+  addr := fmt.Sprintf("%s:%d", server.Host, server.Port)
+
   for {
-    addr := fmt.Sprintf("%s:%d", server.Host, server.Port)
     conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
     if conn_err != nil {
     } else {
@@ -92,8 +94,8 @@ func (server_state ServerState) ircLoopSend(wg *sync.WaitGroup, rw *darkness_red
 
 func (server_state ServerState) ircLoopRecv(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter, server darkness_config.ServerConfig) {
   defer wg.Done()
-  buf := make([]byte, 512)
   for {
+    buf := make([]byte, 512)
     _, read_err := rw.Read(buf)
     if read_err != nil {
       darkness_log.Log.Error("IRC: connection broken: ", server)
@@ -106,10 +108,12 @@ func (server_state ServerState) ircLoopRecv(wg *sync.WaitGroup, rw *darkness_red
 
 
 func (pub_state PubState) redisPubLoop(relay_config darkness_config.RelayConfig) {
+
   darkness_log.Log.Info("Creating redis publisher")
+  redis := relay_config.Redis
+  addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
+
   for {
-    redis := relay_config.Redis
-    addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
     conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
     if conn_err != nil {
     } else {
@@ -161,9 +165,11 @@ func (pub_state PubState) redisPublishLoop(rw *darkness_redis.RESP_ReadWriter) {
 
 
 func (conn_state ConnectionState) redisSubLoop(relay_config darkness_config.RelayConfig, server darkness_config.ServerConfig) {
+
+  redis := relay_config.Redis
+  addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
+
   for {
-    redis := relay_config.Redis
-    addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
     conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
     if conn_err != nil {
     } else {
@@ -212,13 +218,16 @@ func (conn_state ConnectionState) redisSubscribeLoop(rw *darkness_redis.RESP_Rea
 
 
 func (conn_state ConnectionState) handleDarkRelay(response_message []byte) {
+
   var ev darkness_events.AuthoredEvent
   var err error
+
   err = json.Unmarshal(response_message, &ev)
   if err != nil {
     darkness_log.Log.Error("Unable to unmarshal message to AuthoredEvent: ", err)
     return
   }
+
   darkness_log.Log.Debug("AuthoredEvent received: ", string(ev.Event.Payload))
   conn_state.WireSendCh <- ev
 }
