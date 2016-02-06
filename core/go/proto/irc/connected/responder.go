@@ -135,7 +135,7 @@ func (state State) handleDarkEvent(response_message []byte) {
   /*
    * Do we care about this event?
    */
-  if ev.Event.Type != "relay_connected" {
+  if ev.Event.Type != darkness_events.EVENT_RELAY_CONNECTED {
     /* No. */
     return
   }
