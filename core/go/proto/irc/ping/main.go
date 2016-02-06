@@ -2,6 +2,7 @@ package main
 
 import (
   "github.com/adarqui/darkness/core/go/lib/config"
+  "github.com/adarqui/darkness/core/go/lib/log"
   "log"
 //  "github.com/satori/go.uuid"
   "os"
@@ -21,6 +22,8 @@ func main() {
   }
 
 //  uuid := uuid.NewV4()
+
+  darkness_log.InitLog()
 
   var wg sync.WaitGroup
   wg.Add(1)

@@ -109,7 +109,7 @@ func (state State) redisSubscribeLoop(rw *darkness_redis.RESP_ReadWriter) {
       return
     }
 
-    darkness_log.Log.Debug("SUBSCRIBER: Message received: ", string(response_key))
+    darkness_log.Log.Debug("SUBSCRIBER: Message received on key: ", string(response_key))
 
     switch string(response_key) {
       case darkness_keys.DARK_EVENT:
@@ -128,7 +128,7 @@ func (state State) handleDarkEvent(response_message []byte) {
 
   err = json.Unmarshal(response_message, &ev)
   if err != nil {
-    darkness_log.Log.Error("Unabl to unmarshal event: ", err)
+    darkness_log.Log.Error("Unable to unmarshal event: ", err)
     return
   }
 

@@ -1,3 +1,8 @@
 configs:
 - need to pull out repetitive config entries and place them into their own files, ie redis
 - modularize connection/redis stuff in core/go
+- ssl connections to irc
+- keys for channels
+- share code between listeners, etc.. eventually need an event lib
+- need levels of verbose logging.. each listener, relay, etc, should be able to start via command line which accepts generic arguments & specific ones.
+-- generic being verbose, redis config file, .. etc

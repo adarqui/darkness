@@ -63,6 +63,7 @@ func (state State) redisSubLoop(irc_connected_config darkness_config.IrcConnecte
  * Publish events to the relay
  */
 func (state State) redisPublishLoop(rw *darkness_redis.RESP_ReadWriter) {
+
   for message := range state.WireRecvCh {
 
     darkness_log.Log.Info("PUBLISHER: Message received: ", message)
@@ -88,6 +89,7 @@ func (state State) redisPublishLoop(rw *darkness_redis.RESP_ReadWriter) {
       darkness_log.Log.Errorf("PUBLISH error: %s", err_pub)
     }
   }
+
 }
 
 
@@ -109,10 +111,10 @@ func (state State) redisSubscribeLoop(rw *darkness_redis.RESP_ReadWriter) {
       return
     }
 
-    darkness_log.Log.Debug("SUBSCRIBER: Message received: ", string(response_key))
+    darkness_log.Log.Debug("SUBSCRIBER: Message received on key: ", string(response_key))
 
     switch string(response_key) {
-      case "dark:event":
+      case darkness_keys.DARK_EVENT:
         state.handleDarkEvent(response_message)
       default:
         break
@@ -128,7 +130,7 @@ func (state State) handleDarkEvent(response_message []byte) {
 
   err = json.Unmarshal(response_message, &ev)
   if err != nil {
-    darkness_log.Log.Error("Unabl to unmarshal event: ", err)
+    darkness_log.Log.Error("Unable to unmarshal event: ", err)
     return
   }
 
@@ -146,6 +148,7 @@ func (state State) handleDarkEvent(response_message []byte) {
   v, ok := state.Config.Labels[ev.Server.Label]
   if !ok {
     darkness_log.Log.Warningf("Unable to find %s in state.Config.Labels", ev.Server.Label)
+    return
   }
 
   state.WireRecvCh <- darkness_events.AuthoredEvent{ev.Server, darkness_events.Raw(0, []byte(fmt.Sprintf("NICK %s\r\n", v.Nicks[0])))}

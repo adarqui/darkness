@@ -1,21 +1,21 @@
 {
   "author" : {
-  "name" : "relay"
+    "name" : "relay"
   },
-  "redis" : {
-    "host" : "localhost",
+  "redis": {
+    "host" : "10.0.3.10",
     "port" : 6379
   },
   "servers" : [
     {
-      "label"        : "irc:localhost_1",
-      "host"         : "localhost",
+      "label"        : "irc_1",
+      "host"         : "10.0.3.10",
       "port"         : 6667,
       "protocol"     : "irc"
     },
     {
-      "label"        : "irc:localhost_2",
-      "host"         : "localhost",
+      "label"        : "irc_2",
+      "host"         : "10.0.3.10",
       "port"         : 6667,
       "protocol"     : "irc"
     }]
