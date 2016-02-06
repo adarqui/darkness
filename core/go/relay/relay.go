@@ -69,6 +69,8 @@ func (server_state ServerState) ircLoop(server darkness_config.ServerConfig) {
       go server_state.ircLoopRecv(&wg, rw, server)
       wg.Wait()
 
+      server_state.Conn.WireSendCh <- darkness_events.AuthoredEvent{server, darkness_events.Die()}
+
       server_state.Pub.RedisPubCh <- darkness_events.AuthoredEvent{server, darkness_events.RelayDisconnected(0)}
       darkness_log.Log.Info("IRC: Disconnected from ", server)
     }
@@ -79,14 +81,27 @@ func (server_state ServerState) ircLoop(server darkness_config.ServerConfig) {
 
 
 func (server_state ServerState) ircLoopSend(wg *sync.WaitGroup, rw *darkness_redis.RESP_ReadWriter, server darkness_config.ServerConfig) {
-  defer wg.Done()
   for {
     event := <-server_state.Conn.WireSendCh
 
+    if event.Event.Type == darkness_events.EVENT_DIE {
+      darkness_log.Log.Info("IRC: Breaking connection")
+      break
+    }
+
+    darkness_log.Log.Info("IRC: Sending message to irc server: ", event.Server, event.Event.Type, string(event.Event.Payload))
+
     message := event.Event.Payload
 
-    rw.Write(message)
-    rw.Flush()
+    _, write_err := rw.Write(message)
+    if write_err != nil {
+      darkness_log.Log.Error("IRC: Write error: ", write_err)
+    }
+
+    flush_err := rw.Flush()
+    if flush_err != nil {
+      darkness_log.Log.Error("IRC: Flush error: ", flush_err)
+    }
   }
 }
 
@@ -201,6 +216,7 @@ func (conn_state ConnectionState) redisSubscribeLoop(rw *darkness_redis.RESP_Rea
 
      response_key, response_message, err := rw.SubscribeMessage(darkness_keys.MkRelayServer(server.Label))
      if err != nil {
+       darkness_log.Log.Error("SUBSCRIBER: Subscribe error: ", err)
        return
      }
 

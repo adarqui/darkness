@@ -2,7 +2,7 @@ package darkness_events
 
 
 
-func MkNop() Event {
+func Nop() Event {
   return Event{
     0,
     EVENT_NOP,
@@ -12,10 +12,10 @@ func MkNop() Event {
 
 
 
-func MkDie() Event {
+func Die() Event {
   return Event{
     0,
-    EVENT_NOP,
+    EVENT_DIE,
     []byte{},
   }
 }
