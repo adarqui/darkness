@@ -1,0 +1,8 @@
+#!/bin/sh
+
+export NODE_PATH=`pwd`/../../lib/:`pwd`/../../../lib
+
+export CONFIG=../../../../../config/redis.json
+
+# ignore config for now
+node dark_nodejs_interp_scheme.js "${CONFIG}"
