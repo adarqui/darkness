@@ -1,0 +1,15 @@
+{
+  "name": "dark-command-urban",
+  "version": "1.0.0",
+  "description": "urban dictionary",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "optparse": "*",
+    "urban": "*"
+  },
+  "author": "adarqui",
+  "license": "MIT"
+}
