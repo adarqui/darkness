@@ -1,7 +1,8 @@
 var
-  Redis = require("redis"),
-  DarkKeys = require("darkness_keys"),
-  DarkIrc = require("darkness_irc")
+  Redis     = require("redis"),
+  DarkKeys  = require("darkness_keys"),
+  DarkIrc   = require("darkness_irc"),
+  ArgParser = require("argparser-js")
   ;
 
 
