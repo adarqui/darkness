@@ -2,7 +2,8 @@ var
   Redis     = require("redis"),
   DarkKeys  = require("darkness_keys"),
   DarkIrc   = require("darkness_irc"),
-  ArgParser = require("argparser-js")
+  ArgParser = require("argparser-js"),
+  _         = require("lodash")
   ;
 
 
@@ -47,8 +48,10 @@ var redisLoop = function(o) {
         if (message[2] != "PRIVMSG") {
           break;
         }
-        if (message[4][0] == ".") {
-          console.log("TRIGGER");
+        if (_.head(message[4]) == ".") {
+          var rest = _.tail(message[4]);
+          var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
+          console.log("TRIGGER", argv);
         }
       }
       default : {
