@@ -39,20 +39,28 @@ var redisLoop = function(o) {
   sub.on('message', function(channel,data) {
     var json = JSON.parse(data);
     switch(channel) {
+
       case DarkKeys.DARK_EVENT : {
+
         var payload = new Buffer(json['event'].payload, 'base64').toString('ascii');
-        var message = DarkIrc.parse(DarkIrc.clean(payload));
-        if (message == null) {
+        var irc_message = DarkIrc.parse(DarkIrc.clean(payload));
+
+        if (irc_message == null) {
           break;
         }
-        if (message[2] != "PRIVMSG") {
+
+        if (irc_message[2] != "PRIVMSG") {
           break;
         }
-        if (_.head(message[4]) == ".") {
-          var rest = _.tail(message[4]);
+
+        var dark_message = irc_message[4].replace(/\0/g, '');
+
+        if (_.head(dark_message) == ".") {
+          var rest = _.tail(dark_message);
           var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
           console.log("TRIGGER", argv);
         }
+
       }
       default : {
         break;
