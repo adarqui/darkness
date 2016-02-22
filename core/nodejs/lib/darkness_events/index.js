@@ -98,7 +98,8 @@ var tunnelSentMessage = function(id, v) {
 
 
 var raw = function(id, message) {
-  return mkEvent(id, EVENT_RAW, message);
+  var message_b64 = new Buffer(message);
+  return mkEvent(id, EVENT_RAW, message_b64.toString('base64'));
 };
 
 
@@ -124,10 +125,11 @@ module.exports = {
   die                  : die,
   relayConnected       : relayConnected,
   relayDisconnected    : relayDisconnected,
-  relayReceivedMessage : relayReceievedMessage,
+  relayReceivedMessage : relayReceivedMessage,
   tunnelConnected      : tunnelConnected,
   tunnelDisconnected   : tunnelDisconnected,
-  tunnelSentMessage    : tunnelSentMessage
+  tunnelSentMessage    : tunnelSentMessage,
+  raw                  : raw
 };
 
 

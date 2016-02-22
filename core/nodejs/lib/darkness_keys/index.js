@@ -50,7 +50,7 @@ module.exports = {
   DARK_COUNTER      : DARK_COUNTER,
   DARK_EVENT        : DARK_EVENT,
   DARK_RELAY        : DARK_RELAY,
-  DARK_INTERP_REPLY : DARK_INTERP_RELAY,
+  DARK_INTERP_REPLY : DARK_INTERP_REPLY,
 
   mkCounter     : mkCounter,
   mkEvent       : mkEvent,

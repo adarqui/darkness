@@ -22,9 +22,18 @@ var clean = function(message) {
 
 
 
+var prepare_reply_privmsg = function(irc_message, reply) {
+  return ("PRIVMSG " + irc_message[3] + " :" + reply + "\r\n");
+};
+
+
+
 module.exports = {
   parse: parse,
-  clean: clean
+  clean: clean,
+  prepare_reply_privmsg: prepare_reply_privmsg
 };
+
+
 
 })();

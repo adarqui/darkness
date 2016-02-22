@@ -3,12 +3,13 @@
 
 
 var
-  cproc     = require("child_process"),
-  Redis     = require("redis"),
-  DarkKeys  = require("darkness_keys"),
-  DarkIrc   = require("darkness_irc"),
-  ArgParser = require("argparser-js"),
-  _         = require("lodash")
+  cproc      = require("child_process"),
+  Redis      = require("redis"),
+  DarkEvents = require("darkness_events"),
+  DarkKeys   = require("darkness_keys"),
+  DarkIrc    = require("darkness_irc"),
+  ArgParser  = require("argparser-js"),
+  _          = require("lodash")
   ;
 
 
@@ -43,6 +44,7 @@ var redisLoop = function(o) {
 
   sub.on('message', function(channel,data) {
     var json = JSON.parse(data);
+
     switch(channel) {
 
       case DarkKeys.DARK_EVENT : {
@@ -66,8 +68,16 @@ var redisLoop = function(o) {
           console.log("TRIGGER", argv);
           var cmd = cproc.spawn("./" + _.head(argv), _.tail(argv), { cwd: commands });
           cmd.stdout.on("data", function(data) {
-            console.log(data.toString());
-            d
+
+            // filter out bad lines from the left & right
+            var lines_ = _.split(data.toString(), "\n");
+            var isBadChars = function(c) { return (c == "\r\n" || c == "\r" || c == "\n" || c === ""); };
+            var lines = _.dropRightWhile(_.dropWhile(lines_, isBadChars), isBadChars);
+
+            _.each(lines, function(value) {
+              var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, value);
+              pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
+            });
           });
           cmd.stderr.on("data", function(data) {
             console.log(data.toString());
