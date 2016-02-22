@@ -3,21 +3,17 @@
 
 
 
-var exports = module.exports = {};
-
-
-
-exports.DARK_COUNTER      = "dark:counter";
-exports.DARK_EVENT        = "dark:event";
-exports.DARK_RELAY        = "dark:relay";
-exports.DARK_INTERP_REPLY = "dark:interp:reply";
+var DARK_COUNTER      = "dark:counter";
+var DARK_EVENT        = "dark:event";
+var DARK_RELAY        = "dark:relay";
+var DARK_INTERP_REPLY = "dark:interp:reply";
 
 
 
 /*
  * DARK_COUNTER:<label>
  */
-exports.mkCounter = function(key) {
+var mkCounter = function(key) {
   return DARK_COUNTER + ":" + key;
 };
 
@@ -26,7 +22,7 @@ exports.mkCounter = function(key) {
 /*
  * DARK_EVENT
  */
-exports.mkEvent = function() {
+var mkEvent = function() {
   return DARK_EVENT;
 };
 
@@ -35,7 +31,7 @@ exports.mkEvent = function() {
 /*
  * DARK_RELAY
  */
-exports.mkRelay = function() {
+var mkRelay = function() {
   return DARK_RELAY;
 };
 
@@ -44,8 +40,22 @@ exports.mkRelay = function() {
 /*
 * DARK_RELAY:<SERVER>
  */
-exports.mkRelayServer = function(key) {
+var mkRelayServer = function(key) {
   return DARK_RELAY + ":" + key;
+};
+
+
+
+module.exports = {
+  DARK_COUNTER      : DARK_COUNTER,
+  DARK_EVENT        : DARK_EVENT,
+  DARK_RELAY        : DARK_RELAY,
+  DARK_INTERP_REPLY : DARK_INTERP_RELAY,
+
+  mkCounter     : mkCounter,
+  mkEvent       : mkEvent,
+  mkRelay       : mkRelay,
+  mkRelayServer : mkRelayServer
 };
 
 
