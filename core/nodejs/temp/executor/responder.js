@@ -1,4 +1,9 @@
+(function() {
+"use strict";
+
+
 var
+  cproc     = require("child_process"),
   Redis     = require("redis"),
   DarkKeys  = require("darkness_keys"),
   DarkIrc   = require("darkness_irc"),
@@ -20,7 +25,7 @@ var redisLoop = function(o) {
   var pub = Redis.createClient(redis_url);
 
   pub.on('error', function(err) {
-    console.log("redis: Error:", err)
+    console.log("redis: Error:", err);
   });
 
 
@@ -34,7 +39,7 @@ var redisLoop = function(o) {
   console.log('subscribing');
 
   sub.subscribe(DarkKeys.DARK_EVENT, function(err,data) {
-  })
+  });
 
   sub.on('message', function(channel,data) {
     var json = JSON.parse(data);
@@ -42,10 +47,10 @@ var redisLoop = function(o) {
 
       case DarkKeys.DARK_EVENT : {
 
-        var payload = new Buffer(json['event'].payload, 'base64').toString('ascii');
+        var payload = new Buffer(json.event.payload, 'base64').toString('ascii');
         var irc_message = DarkIrc.parse(DarkIrc.clean(payload));
 
-        if (irc_message == null) {
+        if (irc_message === null) {
           break;
         }
 
@@ -59,19 +64,35 @@ var redisLoop = function(o) {
           var rest = _.tail(dark_message);
           var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
           console.log("TRIGGER", argv);
+          var cmd = cproc.spawn("./" + _.head(argv), _.tail(argv), { cwd: commands });
+          cmd.stdout.on("data", function(data) {
+            console.log(data.toString());
+            d
+          });
+          cmd.stderr.on("data", function(data) {
+            console.log(data.toString());
+          });
+          cmd.on("error", function(err) {
+            console.log(err);
+          });
         }
 
+        break;
       }
+
       default : {
         break;
       }
+
     }
   });
 
-}
+};
 
 
 
 module.exports = {
   redisLoop: redisLoop
-}
+};
+
+})();

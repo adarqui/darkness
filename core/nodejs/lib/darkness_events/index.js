@@ -7,44 +7,60 @@ var exports = module.exports = {};
 
 
 
-exports.DARK_COUNTER = "dark:counter";
-exports.DARK_EVENT   = "dark:event";
-exports.DARK_RELAY   = "dark:relay";
+exports.EVENT_NOP                    = "nop";
+exports.EVENT_DIE                    = "die";
+exports.EVENT_RELAY_CONNECTED        = "relay_connected";
+exports.EVENT_RELAY_DISCONNECTED     = "relay_disconnected";
+exports.EVENT_TUNNEL_CONNECTED       = "tunnel_connected";
+exports.EVENT_TUNNEL_DISCONNECTED    = "tunnel_disconnected";
+exports.EVENT_RELAY_RECEIVED_MESSAGE = "relay_received_message";
+exports.EVENT_TUNNEL_SENT_MESSAGE    = "tunnel_sent_message";
+exports.EVENT_RAW                    = "raw";
 
 
 
-/*
- * DARK_COUNTER:<label>
- */
-exports.mkCounter = function(key) {
-  return DARK_COUNTER + ":" + key;
+exports.Event = {
+  "id": 0,
+  "type": "",
+  "payload" : []
 };
 
 
 
-/*
- * DARK_EVENT
- */
-exports.mkEvent = function() {
-  return DARK_EVENT;
+exports.AuthoredEvent = {
+  "server": {},
+  "event": {}
 };
 
 
 
-/*
- * DARK_RELAY
- */
-exports.mkRelay = function() {
-  return DARK_RELAY;
+exports.mkEvent = function(id, type, payload) {
+  return {
+    "id": id,
+    "type": type,
+    "payload": payload
+  };
 };
 
 
 
-/*
-* DARK_RELAY:<SERVER>
- */
-exports.mkRelayServer = function(key) {
-  return DARK_RELAY + ":" + key;
+exports.mkAuthoredEvent = function(server, event) {
+  return {
+    "server": server,
+    "event": event
+  };
+};
+
+
+
+exports.nop = function() {
+  return mkEvent(0, EVENT_NOP, {});
+};
+
+
+
+exports.die = function() {
+  return mkEvent(0, EVENT_DIE, {});
 };
 
 
