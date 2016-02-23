@@ -2,7 +2,6 @@ package darkness_config
 
 type RelayConfig struct {
   Author  AuthorConfig               `json:"author"`
-  Redis   RedisConfig                `json:"redis"`
   Net     NetConfig                  `json:"net"`
   Servers []ServerConfig             `json:"servers"`
 //  Servers map[string]ServerConfig    `json:"servers"`
@@ -37,7 +36,6 @@ type IrcServerConfig struct {
 }
 
 type IrcConnectedConfig struct {
-  Redis RedisConfig                `json:"redis"`
   Labels map[string]IrcJoinConfig  `json:"labels"`
 }
 
