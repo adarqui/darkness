@@ -1,8 +1,28 @@
 #!/bin/bash
 
-mkdir -p ~/build/src/github.com/adarqui
+usage() {
+  echo 'source bootstrap.sh <config_path>'
+}
 
-export GOPATH=~/build/
+if [ $# -ne 1 ] ; then
+  usage && exit 1
+fi
+
+
+
+#
+# env variables
+#
+export DARK_CONFIGS="$1"
+export DARK_ROOT="~/build/src/github.com/adarqui/darkness"
+export GOPATH="~/build/"
+
+
+
+#
+# setup everything
+#
+mkdir -p ~/build/src/github.com/adarqui
 
 cd ~/build/src/github.com/adarqui
 
