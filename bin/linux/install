@@ -45,3 +45,4 @@ if [ ! -f /usr/local/bin/ghc ] ; then
   ./install-haskell-platform.sh
 fi
 
+apt-get install -y libgmp-dev libgmp10
