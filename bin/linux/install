@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# temporary script to install stuff
+mkdir -f ~/darkness.build
+cd ~/darkness.build
+
+apt-get update
+apt-get -y upgrade
+apt-get -y install build-essential
+apt-get -y install git tmux wget curl
+
+# golang
+wget https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+tar -C /usr zxvf go1.6.linux-amd64.tar.gz
+
+# node.js
+
+# haskell
