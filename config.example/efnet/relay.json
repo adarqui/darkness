@@ -8,5 +8,5 @@
       "host"         : "irc.efnet.org",
       "port"         : 6667,
       "protocol"     : "irc"
-    }
+    }]
 }
