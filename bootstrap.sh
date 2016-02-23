@@ -1,4 +1,7 @@
 #!/bin/bash
 
-mkdir -p ~/build/go
-export GOPATH=~/build/go/
+mkdir -p ~/build/github.com/adarqui
+
+export GOPATH=~/build/
+
+(cd ~/build/github.com/adarqui; git clone https://github.com/adarqui/darkness)
