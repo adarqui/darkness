@@ -17,13 +17,13 @@ import (
 
 
 
-func loop(relay_config darkness_config.RelayConfig) {
+func loop(redis_config darkness_config.RedisConfig, relay_config darkness_config.RelayConfig) {
   /*
    * Our redis publish loop runs in it's own go routine.
    * Anything it receives will be published to redis.
    */
   pub_state := makePubState()
-  go pub_state.redisPubLoop(relay_config)
+  go pub_state.redisPubLoop(redis_config)
 
   /*
    * Create a bunch of tunnels to servers.
@@ -32,16 +32,16 @@ func loop(relay_config darkness_config.RelayConfig) {
    */
   for _, server := range relay_config.Servers {
     server_state := makeServerState(pub_state)
-    server_state.loopServer(relay_config, server)
+    server_state.loopServer(redis_config, relay_config, server)
   }
 }
 
 
 
-func (server_state ServerState) loopServer(relay_config darkness_config.RelayConfig, server_config darkness_config.ServerConfig) {
+func (server_state ServerState) loopServer(redis_config darkness_config.RedisConfig, relay_config darkness_config.RelayConfig, server_config darkness_config.ServerConfig) {
   darkness_log.Log.Info("Connecting to: ", server_config)
   go server_state.ircLoop(server_config)
-  go server_state.Conn.redisSubLoop(relay_config, server_config)
+  go server_state.Conn.redisSubLoop(redis_config, server_config)
 }
 
 
@@ -123,10 +123,10 @@ func (server_state ServerState) ircLoopRecv(wg *sync.WaitGroup, rw *darkness_red
 
 
 
-func (pub_state PubState) redisPubLoop(relay_config darkness_config.RelayConfig) {
+func (pub_state PubState) redisPubLoop(redis_config darkness_config.RedisConfig) {
 
   darkness_log.Log.Info("Creating redis publisher")
-  redis := relay_config.Redis
+  redis := redis_config
   addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
 
   for {
@@ -180,9 +180,9 @@ func (pub_state PubState) redisPublishLoop(rw *darkness_redis.RESP_ReadWriter) {
 
 
 
-func (conn_state ConnectionState) redisSubLoop(relay_config darkness_config.RelayConfig, server darkness_config.ServerConfig) {
+func (conn_state ConnectionState) redisSubLoop(redis_config darkness_config.RedisConfig, server darkness_config.ServerConfig) {
 
-  redis := relay_config.Redis
+  redis := redis_config
   addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
 
   for {
