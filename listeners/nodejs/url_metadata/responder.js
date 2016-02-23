@@ -14,7 +14,9 @@ var
 
 
 // http://code.tutsplus.com/tutorials/8-regular-expressions-you-should-know--net-6149
-var url_regex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+// var url_regex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/g;
+// my boi meder: https://github.com/medero/fedor/blob/master/vendor/parser/parser.js#L78
+var url_regex = /(https?:[;\/?\\@&=+$,\[\]A-Za-z0-9\-_\.\!\~\*\'\(\)%][\;\/\?\:\@\&\=\+\$\,\[\]A-Za-z0-9\-_\.\!\~\*\'\(\)%#]*|[KZ]:\\*.*\w+)/g;
 
 
 
@@ -78,7 +80,7 @@ var redisLoop = function(o) {
         });
 
         client.on("error", function(err){
-          console.log(error);
+          console.log("error", err);
         });
 
         client.fetch();
