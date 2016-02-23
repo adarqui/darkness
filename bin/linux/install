@@ -14,7 +14,7 @@ apt-get -y install git tmux wget curl
 #
 # golang
 #
-if [ ! -f /usr/local/bin/go ] ; then
+if [ ! -f /usr/local/go/bin/go ] ; then
   wget https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
   tar zxv -C /usr/local -f go1.6.linux-amd64.tar.gz
 fi
