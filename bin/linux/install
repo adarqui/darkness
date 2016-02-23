@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # temporary script to install stuff
-mkdir -f ~/darkness.build
+mkdir -p ~/darkness.build
 cd ~/darkness.build
 
 apt-get update
