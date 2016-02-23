@@ -39,3 +39,9 @@ chmod 755 /etc/profile.d/node.sh
 #
 # haskell
 #
+if [ ! -f /usr/local/bin/ghc ] ; then
+  wget https://haskell.org/platform/download/7.10.3/haskell-platform-7.10.3-unknown-posix-x86_64.tar.gz
+  tar zxvf haskell-platform-7.10.3-unknown-posix-x86_64.tar.gz
+  ./install-haskell-platform.sh
+fi
+
