@@ -5,7 +5,7 @@ usage() {
 }
 
 if [ $# -ne 1 ] ; then
-  usage && exit 1
+  usage
 fi
 
 
