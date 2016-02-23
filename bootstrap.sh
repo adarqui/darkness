@@ -1,10 +1,10 @@
 #!/bin/bash
 
-mkdir -p ~/build/github.com/adarqui
+mkdir -p ~/build/src/github.com/adarqui
 
 export GOPATH=~/build/
 
-cd ~/build/github.com/adarqui
+cd ~/build/src/github.com/adarqui
 
 if [ ! -d darkness ] ; then
   git clone https://github.com/adarqui/darkness
