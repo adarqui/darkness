@@ -1,0 +1,12 @@
+{
+  "author" : {
+    "name" : "relay"
+  },
+  "servers" : [
+    {
+      "label"        : "irc_efnet",
+      "host"         : "irc.efnet.org",
+      "port"         : 6667,
+      "protocol"     : "irc"
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "author" : {
+    "name" : "relay"
+  },
+  "servers" : [
+    {
+      "label"        : "irc_1",
+      "host"         : "10.0.3.10",
+      "port"         : 6667,
+      "protocol"     : "irc"
+    },
+    {
+      "label"        : "irc_2",
+      "host"         : "10.0.3.10",
+      "port"         : 6667,
+      "protocol"     : "irc"
+    }]
+  }
+}

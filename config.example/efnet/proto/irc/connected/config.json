@@ -1,0 +1,11 @@
+{
+  "labels": {
+    "irc_1" : {
+      "nicks"     : ["darkness"],
+      "user_name" : "darkness",
+      "user_mode" : 0,
+      "real_name" : "Darkness",
+      "channels"  : ["#jumping", "#darkness-test"]
+    }
+  }
+}

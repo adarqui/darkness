@@ -3,3 +3,6 @@ node_modules
 *_libs/
 c
 *.so
+config.json
+redis.json
+config.js
