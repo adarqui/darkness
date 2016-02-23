@@ -80,7 +80,15 @@ var redisLoop = function(o) {
             });
           });
           cmd.stderr.on("data", function(data) {
-            console.log(data.toString());
+            // filter out bad lines from the left & right
+            var lines_ = _.split(data.toString(), "\n");
+            var isBadChars = function(c) { return (c == "\r\n" || c == "\r" || c == "\n" || c === ""); };
+            var lines = _.dropRightWhile(_.dropWhile(lines_, isBadChars), isBadChars);
+
+            _.each(lines, function(value) {
+              var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, value);
+              pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
+            });
           });
           cmd.on("error", function(err) {
             console.log(err);
