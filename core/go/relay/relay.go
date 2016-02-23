@@ -1,6 +1,7 @@
 package main
 
 import (
+  "bytes"
   "encoding/json"
   "fmt"
   "github.com/adarqui/darkness/core/go/lib/config"
@@ -91,7 +92,7 @@ func (server_state ServerState) ircLoopSend(wg *sync.WaitGroup, rw *darkness_red
 
     darkness_log.Log.Info("IRC: Sending message to irc server: ", event.Server, event.Event.Type, string(event.Event.Payload))
 
-    message := event.Event.Payload
+    message := bytes.Trim(event.Event.Payload, "\x00")
 
     _, write_err := rw.Write(message)
     if write_err != nil {
