@@ -12,6 +12,7 @@ fi
 # env variables
 #
 export DARK_ROOT="~/build/src/github.com/adarqui/darkness"
+export DARK_LOGS="${DARK_ROOT}/logs"
 export GOPATH="~/build/"
 
 
