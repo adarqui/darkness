@@ -6,3 +6,12 @@ configs:
 - share code between listeners, etc.. eventually need an event lib
 - need levels of verbose logging.. each listener, relay, etc, should be able to start via command line which accepts generic arguments & specific ones.
 -- generic being verbose, redis config file, .. etc
+
+architecture:
+- should be able to start several relay bots, all connected to IRC for example. PRIVMSG's could then somehow be put through a job system so that only one bot handles one job. This way we could have 6 bots connected, and someone pastes a url, only one bot would respond with the resolved url.
+- ^^ for the jobs above, we need to be able to use multiple job systems
+
+code:
+- reduce code duplication
+- organize better
+- get rid of config path/lib path hell
