@@ -1,11 +1,9 @@
 #!/bin/bash
 
-usage() {
-  echo 'source bootstrap.sh <config_path>'
-}
-
 if [ $# -ne 1 ] ; then
-  usage
+  export DARK_CONFIGS=`pwd`/config
+else
+  export DARK_CONFIGS="$1"
 fi
 
 
@@ -13,7 +11,6 @@ fi
 #
 # env variables
 #
-export DARK_CONFIGS="$1"
 export DARK_ROOT="~/build/src/github.com/adarqui/darkness"
 export GOPATH="~/build/"
 
