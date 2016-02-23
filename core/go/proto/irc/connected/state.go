@@ -7,10 +7,11 @@ import (
 
 
 
-func makeState(conf darkness_config.IrcConnectedConfig) State {
+func makeState(redis_config darkness_config.RedisConfig, connected_config darkness_config.IrcConnectedConfig) State {
   return State{
     make(chan darkness_events.AuthoredEvent),
     make(chan darkness_events.AuthoredEvent),
-    conf,
+    redis_config,
+    connected_config,
   }
 }

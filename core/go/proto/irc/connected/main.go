@@ -3,32 +3,37 @@ package main
 import (
   "github.com/adarqui/darkness/core/go/lib/config"
   "github.com/adarqui/darkness/core/go/lib/log"
+  "flag"
   "log"
-//  "github.com/satori/go.uuid"
-  "os"
   "sync"
 )
 
 
 
 func main() {
-  args := os.Args
-  if len(args) < 2 {
+
+  flag.Parse()
+
+  if flag_redis_config == "" || flag_connected_config == "" {
     usage()
   }
-  conf, err := darkness_config.ParseIrcConnectedConfig(args[1])
+
+  redis_config, err := darkness_config.ParseRedisFileConfig(flag_redis_config)
   if err != nil {
     log.Fatal(err)
   }
 
-//  uuid := uuid.NewV4()
+  connected_config, err := darkness_config.ParseIrcConnectedConfig(flag_connected_config)
+  if err != nil {
+    log.Fatal(err)
+  }
 
   darkness_log.InitLog()
 
   var wg sync.WaitGroup
   wg.Add(1)
-  state := makeState(conf)
-  go state.redisPubLoop(conf)
-  go state.redisSubLoop(conf)
+  state := makeState(redis_config.Redis, connected_config)
+  go state.redisPubLoop(redis_config.Redis, connected_config)
+  go state.redisSubLoop(redis_config.Redis, connected_config)
   wg.Wait()
 }

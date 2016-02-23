@@ -14,9 +14,9 @@ import (
 
 
 
-func (state State) redisPubLoop(irc_connected_config darkness_config.IrcConnectedConfig) {
+func (state State) redisPubLoop(redis_config darkness_config.RedisConfig, irc_connected_config darkness_config.IrcConnectedConfig) {
   for {
-    redis := irc_connected_config.Redis
+    redis := redis_config
     addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
     conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
     if conn_err != nil {
@@ -37,9 +37,9 @@ func (state State) redisPubLoop(irc_connected_config darkness_config.IrcConnecte
 
 
 
-func (state State) redisSubLoop(irc_connected_config darkness_config.IrcConnectedConfig) {
+func (state State) redisSubLoop(redis_config darkness_config.RedisConfig, irc_connected_config darkness_config.IrcConnectedConfig) {
   for {
-    redis := irc_connected_config.Redis
+    redis := redis_config
     addr := fmt.Sprintf("%s:%d", redis.RedisHost, redis.RedisPort)
     conn, conn_err := net.DialTimeout("tcp", addr, 10*time.Second)
     if conn_err != nil {
@@ -145,7 +145,7 @@ func (state State) handleDarkEvent(response_message []byte) {
   /*
    * look for the label within the config in State, if found, publish some stuff to the relay to forward to the irc server
    */
-  v, ok := state.Config.Labels[ev.Server.Label]
+  v, ok := state.ConnectedConfig.Labels[ev.Server.Label]
   if !ok {
     darkness_log.Log.Warningf("Unable to find %s in state.Config.Labels", ev.Server.Label)
     return

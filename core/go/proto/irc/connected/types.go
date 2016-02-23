@@ -10,5 +10,6 @@ import (
 type State struct {
   WireSendCh chan darkness_events.AuthoredEvent
   WireRecvCh chan darkness_events.AuthoredEvent
-  Config darkness_config.IrcConnectedConfig
+  RedisConfig darkness_config.RedisConfig
+  ConnectedConfig darkness_config.IrcConnectedConfig
 }
