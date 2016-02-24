@@ -6,12 +6,15 @@ mkdir -p /usr/local
 
 cd ~/darkness.build
 
+rsync -av rootfs/ /
+
 apt-get update
 apt-get -y upgrade
 apt-get -y install build-essential
 apt-get -y install git tmux wget curl
 apt-get -y install xz-utils
 apt-get -y install tcpdump
+apt-get -y install redis-server
 
 #
 # golang
