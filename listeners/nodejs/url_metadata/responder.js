@@ -72,10 +72,21 @@ var redisLoop = function(o) {
           break;
         }
 
-        var client = new Inspect(results[0], { timeout: 5000 });
+        var client = new Inspect(results[0], { timeout: 10000 });
 
         client.on("fetch", function(){
-          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, client.description);
+          var title;
+          // flaccid
+          if (client.title !== null && client.title !== undefined && client.title != "undefined") {
+            title = client.title;
+            if (client.description !== null && client.description !== undefined && client.description !== client.title && client.description != "undefined") {
+              title = title + " : " + client.description;
+          } else if (client.description !== null && client.description !== undefined && client.description != "undefined") {
+            title = client.description;
+          } else
+            return;
+          }
+          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, client.title + " : " + client.description);
           pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
         });
 
