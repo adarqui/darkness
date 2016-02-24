@@ -1,0 +1,11 @@
+some cheerio bug:
+
+/home/darkness/build/src/github.com/adarqui/darkness/listeners/nodejs/url_metadata/node_modules/no
+de-metainspector/node_modules/cheerio/node_modules/css-select/lib/general.js:21
+                        return getName(elem) === name && next(elem);
+                               ^
+
+RangeError: Maximum call stack size exceeded
+    at tag (/home/darkness/build/src/github.com/adarqui/darkness/listeners/nodejs/url_metadata/nod
+e_modules/node-metainspector/node_modules/cheerio/node_modules/css-select/lib/general.js:21:11)
+    at findAll (/home/darkness/build/src/github.com/adarqui/darkness/listeners/nodejs/url_metadata
