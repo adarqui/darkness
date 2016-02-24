@@ -1,7 +1,7 @@
 {
   "labels": {
     "irc_efnet" : {
-      "nicks"     : ["darkness"],
+      "nicks"     : ["polybot"],
       "user_name" : "darkness",
       "user_mode" : 0,
       "real_name" : "Darkness",
