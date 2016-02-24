@@ -1,13 +1,13 @@
 name:                triggers
 version:             0.1.0.0
-synopsis:            Initial project template from stack
+synopsis:            triggers listeners & binaries
 description:         Please see README.md
-homepage:            http://github.com/githubuser/triggers#readme
-license:             BSD3
+homepage:            http://github.com/adarqui/darkness#readme
+license:             MIT
 license-file:        LICENSE
-author:              Example Author Name
-maintainer:          example@example.com
-copyright:           2016 Author Here
+author:              Andrew Darqui
+maintainer:          andrew.darqui@gmail.com
+copyright:           2016 Andrew Darqui
 category:            Web
 build-type:          Simple
 -- extra-source-files:
@@ -38,4 +38,4 @@ test-suite triggers-test
 
 source-repository head
   type:     git
-  location: https://github.com/githubuser/triggers
+  location: https://github.com/adarqui/darkness
