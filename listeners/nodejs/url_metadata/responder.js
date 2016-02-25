@@ -81,12 +81,14 @@ var redisLoop = function(o) {
             title = client.title;
             if (client.description !== null && client.description !== undefined && client.description !== client.title && client.description != "undefined") {
               title = title + " : " + client.description;
+            }
           } else if (client.description !== null && client.description !== undefined && client.description != "undefined") {
             title = client.description;
-          } else
+          } else {
             return;
           }
-          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, client.title + " : " + client.description);
+          title = title.replace(/\s\s+/g, ' ').replace(/\r?\n|\r/g, '').trim();
+          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, title);
           pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
         });
 
