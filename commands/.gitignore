@@ -1,0 +1,9 @@
+# ignore commands that are built/compiled, dependencies, object files etc
+*.o
+.stack-work
+.cabal-sandbox
+cabal.sandbox.config
+*.hi
+
+# tells us which language we are using
+vping
