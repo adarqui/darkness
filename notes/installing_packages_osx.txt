@@ -1,0 +1,5 @@
+ocaml:
+brew install ocaml
+brew install opam
+opam init
+opam install oasis
