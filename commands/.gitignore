@@ -6,4 +6,4 @@ cabal.sandbox.config
 *.hi
 
 # tells us which language we are using
-# */*/vping
+*/*/vping
