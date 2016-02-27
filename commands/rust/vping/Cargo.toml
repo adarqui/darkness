@@ -1,0 +1,6 @@
+[package]
+name = "vping"
+version = "0.1.0"
+authors = ["Andrew Darqui <andrew.darqui@gmail.com>"]
+
+[dependencies]
