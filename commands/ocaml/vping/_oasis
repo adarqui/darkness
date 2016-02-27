@@ -1,0 +1,11 @@
+OASISFormat: 0.4
+Name:        vping
+Version:     1.0
+Synopsis:    vping
+Authors:     Andrew Darqui
+License:     MIT
+
+Executable vping
+  Path:       src
+  BuildTools: ocamlbuild
+  MainIs:     main.ml

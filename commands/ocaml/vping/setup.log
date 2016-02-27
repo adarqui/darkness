@@ -1,0 +1,4 @@
+"install-file" "/usr/local/bin/vping"
+"install-dir" "./install"
+"install-dir" "./install/bin"
+"install-file" "./install/bin/vping"
