@@ -1,9 +1,17 @@
 # ignore commands that are built/compiled, dependencies, object files etc
 *.o
+*.log
+
+# haskell
 .stack-work
 .cabal-sandbox
 cabal.sandbox.config
 *.hi
+
+# ocaml / oasis
+_build
+*.byte
+*.data
 
 # tells us which language we are using
 */*/vping
