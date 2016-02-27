@@ -16,6 +16,3 @@ _build
 # rust
 target
 *.lock
-
-# tells us which language we are using
-*/*/vping
