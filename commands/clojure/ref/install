@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs http://clojure.org/guides/getting_started http://leiningen.org/#install

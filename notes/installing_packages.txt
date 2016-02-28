@@ -1,5 +1,18 @@
+ada:
+- http://libre.adacore.com/download/configurations#
+
+clojure:
+- http://clojure.org/guides/getting_started
+- http://leiningen.org/#install
+
+java:
+- http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
 ocaml:
 - https://ocaml.org/docs/install.html
 
 rust:
 - https://www.rust-lang.org/downloads.html
+
+scala:
+- http://www.scala-lang.org/download/

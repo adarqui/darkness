@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs https://ocaml.org/docs/install.html

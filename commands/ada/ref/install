@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs http://libre.adacore.com/download/configurations

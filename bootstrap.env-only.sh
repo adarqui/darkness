@@ -13,5 +13,6 @@ fi
 #
 export DARK_ROOT="${HOME}/build/src/github.com/adarqui/darkness"
 export DARK_LOGS="${DARK_ROOT}/logs"
+export DARK_CMD="${DARK_ROOT}/commands"
 export GOPATH="${HOME}/build/"
 export NODE_PATH="${DARK_ROOT}/core/nodejs/lib/"
