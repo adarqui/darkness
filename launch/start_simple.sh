@@ -11,5 +11,8 @@
 # start url_metadata resolver daemon
 (cd listeners/nodejs/url_metadata; make build; make run &)
 
+# start command executor
+(cd core/nodejs/temp/executor; make build; make run &)
+
 # start relay daemon
 (cd core/go/relay; make build; make run &)

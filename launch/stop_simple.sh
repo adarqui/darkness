@@ -9,5 +9,8 @@
 # stop url_metadata resolver daemon
 (cd listeners/nodejs/url_metadata; make kill)
 
+# stop command executor
+(cd core/nodejs/temp/executor; make kill)
+
 # stop relay daemon
 (cd core/go/relay; make kill)
