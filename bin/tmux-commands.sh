@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SESSION="dark-commands"
 IGNORE_DIRS="private"
