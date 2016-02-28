@@ -2,6 +2,11 @@
 *.o
 *.log
 
+# ada
+b~*
+*.ali
+*.ads
+
 # haskell
 .stack-work
 .cabal-sandbox
