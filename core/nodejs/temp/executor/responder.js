@@ -68,7 +68,7 @@ var redisLoop = function(o) {
           var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
           console.log("TRIGGER", argv);
 
-          if (_.head(argv).indexOf(".") > 0) {
+          if (_.head(argv).indexOf(".") >= 0) {
             console.log("ILLEGAL CHARACTER ATTEMPT", _.head(argv));
             return;
           }
