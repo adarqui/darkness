@@ -1,0 +1,5 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs \
+  http://tldp.org/LDP/abs/html/refcards.html
+  https://gist.github.com/LeCoupa/122b12050f5fb267e75f
