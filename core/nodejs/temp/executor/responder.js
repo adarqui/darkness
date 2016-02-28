@@ -73,37 +73,42 @@ var redisLoop = function(o) {
             return;
           }
 
-          var exe = "./" + _.head(argv);
-          var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands });
+          try {
 
-          console.log("EXE", exe, "ARGV", _.tail(argv), "CWD", commands);
+            var exe = "./" + _.head(argv);
+            var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands });
 
-          cmd.stdout.on("data", function(data) {
+            console.log("EXE", exe, "ARGV", _.tail(argv), "CWD", commands);
 
-            // filter out bad lines from the left & right
-            var lines_ = _.split(data.toString(), "\n");
-            var isBadChars = function(c) { return (c == "\r\n" || c == "\r" || c == "\n" || c === ""); };
-            var lines = _.dropRightWhile(_.dropWhile(lines_, isBadChars), isBadChars);
+            cmd.stdout.on("data", function(data) {
 
-            _.each(lines, function(value) {
-              var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, value);
-              pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
+              // filter out bad lines from the left & right
+              var lines_ = _.split(data.toString(), "\n");
+              var isBadChars = function(c) { return (c == "\r\n" || c == "\r" || c == "\n" || c === ""); };
+              var lines = _.dropRightWhile(_.dropWhile(lines_, isBadChars), isBadChars);
+
+              _.each(lines, function(value) {
+                var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, value);
+                pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
+              });
             });
-          });
-          cmd.stderr.on("data", function(data) {
-            // filter out bad lines from the left & right
-            var lines_ = _.split(data.toString(), "\n");
-            var isBadChars = function(c) { return (c == "\r\n" || c == "\r" || c == "\n" || c === ""); };
-            var lines = _.dropRightWhile(_.dropWhile(lines_, isBadChars), isBadChars);
+            cmd.stderr.on("data", function(data) {
+              // filter out bad lines from the left & right
+              var lines_ = _.split(data.toString(), "\n");
+              var isBadChars = function(c) { return (c == "\r\n" || c == "\r" || c == "\n" || c === ""); };
+              var lines = _.dropRightWhile(_.dropWhile(lines_, isBadChars), isBadChars);
 
-            _.each(lines, function(value) {
-              var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, value);
-              pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
+              _.each(lines, function(value) {
+                var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, value);
+                pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
+              });
             });
-          });
-          cmd.on("error", function(err) {
-            console.log(err);
-          });
+            cmd.on("error", function(err) {
+              console.log(err);
+            });
+          } catch (err) {
+            console.log("CATCH:", err);
+          }
         }
 
         break;
