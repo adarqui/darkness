@@ -67,6 +67,12 @@ var redisLoop = function(o) {
           var rest = _.tail(dark_message);
           var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
           console.log("TRIGGER", argv);
+
+          if (_.head(argv).indexOf(".") > 0) {
+            console.log("ILLEGAL CHARACTER ATTEMPT", _.head(argv));
+            return;
+          }
+
           var exe = "./" + _.head(argv);
           var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands });
 
