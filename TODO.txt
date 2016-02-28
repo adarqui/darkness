@@ -23,3 +23,6 @@ url_metadata:
 
 executor:
 - prepare env (server, nick, etc) prior to command execution .. so commands can use those variables
+
+commands/*/ref/*
+- .lang/ref/spec vs .ref lang spec
