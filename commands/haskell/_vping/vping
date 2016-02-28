@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# stack exec vping-exe $@
+./.stack-work/install/*/*/*/bin/vping-exe
