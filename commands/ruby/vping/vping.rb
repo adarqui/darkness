@@ -1,1 +1,3 @@
-print "ruby\n"
+#!/usr/bin/env ruby
+#
+#print "ruby\n"
