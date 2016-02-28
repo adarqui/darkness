@@ -1,7 +1,6 @@
 *.swp
 node_modules
 *_libs/
-c
 *.so
 dist
 
