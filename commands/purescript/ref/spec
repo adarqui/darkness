@@ -1,4 +1,6 @@
 #!/bin/sh
 
 "${DARK_CMD}"/zargs \
-  https://leanpub.com/purescript/read
+  https://leanpub.com/purescript/read \
+  https://github.com/purescript/purescript/wiki/Language-Guide \
+  https://github.com/purescript/purescript/wiki
