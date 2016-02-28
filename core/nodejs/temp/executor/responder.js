@@ -63,10 +63,15 @@ var redisLoop = function(o) {
         var dark_message = irc_message[4].replace(/\0/g, '');
 
         if (_.head(dark_message) == ".") {
+
           var rest = _.tail(dark_message);
           var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
           console.log("TRIGGER", argv);
-          var cmd = cproc.spawn("./" + _.head(argv), _.tail(argv), { cwd: commands });
+          var exe = "./" + _.head(argv);
+          var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands });
+
+          console.log("EXE", exe, "ARGV", _.tail(argv), "CWD", commands);
+
           cmd.stdout.on("data", function(data) {
 
             // filter out bad lines from the left & right
