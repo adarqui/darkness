@@ -1,0 +1,6 @@
+#!/bin/sh
+
+"#{DARK_CMD}"/zargs \
+  http://www.ada-auth.org/standards/12rm/html/RM-TTL.html \
+  http://www.ada-auth.org/standards/rm12_w_tc1/html/RM-TOC.html \
+  http://www.ada-auth.org/standards/12rat/html/Rat12-TOC.html
