@@ -1,0 +1,4 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs \
+  http://www.cplusplus.com/reference/
