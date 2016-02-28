@@ -1,0 +1,5 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs \
+  http://clojuredocs.org/core-library \
+  http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/
