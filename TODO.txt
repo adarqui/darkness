@@ -19,3 +19,7 @@ code:
 url_metadata:
 - ability to ignore sites:
 - https://*.gfycat.com
+- ability to ignore the bot.. when bot outputs links, don't resolve
+
+executor:
+- prepare env (server, nick, etc) prior to command execution .. so commands can use those variables
