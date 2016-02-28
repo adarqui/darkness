@@ -39,6 +39,9 @@ fi
 echo 'export PATH=$PATH:/usr/local/node-v4.3.1-linux-x64/bin' > /etc/profile.d/node.sh
 chmod 755 /etc/profile.d/node.sh
 
+npm update
+
+
 
 #
 # haskell
@@ -50,3 +53,11 @@ if [ ! -f /usr/local/bin/ghc ] ; then
 fi
 
 apt-get install -y libgmp-dev libgmp10
+
+
+
+#
+# purescript
+#
+npm install -g purescript
+npm install -g pulp
