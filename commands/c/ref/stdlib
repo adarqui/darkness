@@ -1,4 +1,4 @@
 #!/bin/sh
 
-"${DARK_CMD}/zargs \
+"${DARK_CMD}"/zargs \
   https://www.gnu.org/software/libc/manual/html_mono/libc.html
