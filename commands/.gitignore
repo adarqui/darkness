@@ -7,6 +7,11 @@ b~*
 *.ali
 *.ads
 
+# erlang
+ebin
+.rebar
+*.beam
+
 # haskell
 .stack-work
 .cabal-sandbox
