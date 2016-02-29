@@ -1,7 +1,8 @@
 build:
-	echo built
+	npm install
 
 clean:
+	echo clean
 
-run:
-	node vping.js
+test:
+	echo test

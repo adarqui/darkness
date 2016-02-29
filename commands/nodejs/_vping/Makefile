@@ -2,6 +2,7 @@ build:
 	echo built
 
 clean:
+	echo clean
 
-run:
-	node vping.js
+test:
+	echo test
