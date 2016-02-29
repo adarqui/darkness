@@ -1,0 +1,14 @@
+{
+  "name": "google-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Darqui <andrew.darqui@gmail.com> (https://github.com/adarqui)",
+  "license": "MIT",
+  "dependencies": {
+    "google": "git+https://github.com/jprichardson/node-google.git"
+  }
+}
