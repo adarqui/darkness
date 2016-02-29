@@ -1,0 +1,7 @@
+search:
+- https://golanglibs.com
+
+imdb:
+- https://github.com/ariejan/imdb
+- https://github.com/gauravmittal1995/IMDb
+- https://github.com/StalkR/imdb

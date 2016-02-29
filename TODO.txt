@@ -26,3 +26,9 @@ executor:
 
 commands/*/ref/*
 - .lang/ref/spec vs .ref lang spec
+
+talker:
+- write this in haskell, talk through the bot.. use shellac for a repl
+
+logger:
+- write in haskell too, just log all specifically labeled data to a directory/file
