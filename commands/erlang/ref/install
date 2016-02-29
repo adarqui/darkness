@@ -1,0 +1,4 @@
+#!/bin/sh
+
+"${DARK_CMD}"/zargs \
+  http://erlang.org/doc/installation_guide/INSTALL.html
