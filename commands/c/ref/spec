@@ -1,4 +1,0 @@
-#!/bin/sh
-
-"${DARK_CMD}"/zargs \
-  http://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html

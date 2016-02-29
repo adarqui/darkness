@@ -1,4 +1,0 @@
-#!/bin/sh
-
-"${DARK_CMD}"/zargs \
-  http://www.cheatography.com/ashlyn-black/cheat-sheets/c-reference/

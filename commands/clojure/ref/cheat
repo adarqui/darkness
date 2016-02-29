@@ -1,4 +1,0 @@
-#!/bin/sh
-
-"${DARK_CMD}"/zargs \
-  http://clojure.org/api/cheatsheet

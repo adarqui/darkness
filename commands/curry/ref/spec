@@ -1,4 +1,0 @@
-#!/bin/sh
-
-"${DARK_CMD}"/zargs \
-  http://www-ps.informatik.uni-kiel.de/currywiki/documentation/report

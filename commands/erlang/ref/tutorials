@@ -1,4 +1,0 @@
-#!/bin/sh
-
-"${DARK_CMD}"/zargs \
-  http://alancastro.org/2010/05/01/erlang-application-management-with-rebar.html
