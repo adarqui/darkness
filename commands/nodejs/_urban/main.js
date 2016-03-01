@@ -4,4 +4,4 @@ var
 
 
 
-Cmd.Process(process.argv)
+Cmd.Process(process.argv);

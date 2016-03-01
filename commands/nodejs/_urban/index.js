@@ -83,22 +83,22 @@ var process = function(argv) {
     return;
   }
 
-  if (arg != undefined) {
+  if (arg !== undefined) {
     var lookup = Urban(arg);
 
-    if (options.total == true) {
+    if (options.total === true) {
       lookup.results(function(json) {
         console.log(json.length);
       });
     }
 
-    else if (options.random == true) {
+    else if (options.random === true) {
       lookup.results(function(json) {
         printResult(json[randomArrayIndex(json)], options);
       });
     }
 
-    else if (options.random == false) {
+    else if (options.random === false) {
       lookup.results(function(json) {
         var def = json[options.nth];
         printResult(def, options);
@@ -106,30 +106,33 @@ var process = function(argv) {
     }
 
   }
-}
+};
 
 
 
 var printResult = function(v, opts) {
-  if (opts.examples == true) {
+  if (v === undefined) {
+    return;
+  }
+  if (opts.examples === true) {
     console.log(v.example);
   } else {
-    if (opts.json == true) {
+    if (opts.json === true) {
       console.log(v);
     } else {
       console.log(v.definition);
     }
   }
-}
+};
 
 
 
 var randomArrayIndex = function(arr) {
   return (Math.floor(Math.random() * 100) % arr.length);
-}
+};
 
 
 
 module.exports = {
   Process: process
-}
+};
