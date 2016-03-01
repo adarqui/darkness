@@ -32,3 +32,8 @@ talker:
 
 logger:
 - write in haskell too, just log all specifically labeled data to a directory/file
+
+commands:
+- youtube
+- boxrec
+- sherdog
