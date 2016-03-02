@@ -1,3 +1,6 @@
+(function() {
+  "use strict";
+
 var
   Redis = require("redis"),
   Responder = require("./responder")
@@ -6,9 +9,9 @@ var
 
 
 var usage = function() {
-  console.log("./dark_nodejs_interp_scheme <config_file> <commands_path>");
+  console.log("./dark_nodejs_executor.js <redis_config_file> <executor_config_file>");
   process.exit(1);
-}
+};
 
 
 
@@ -18,13 +21,15 @@ var main = function(argv, argc) {
     usage();
   }
 
-  var conf = require(argv[2]);
-  var commands_path = argv[3];
-  console.log(conf);
+  var redis_config = require(argv[2]);
+  var executor_config = require(argv[3]);
+  console.log(redis_config, executor_config);
 
-  Responder.redisLoop({config: conf, commands: commands_path});
-}
+  Responder.redisLoop(redis_config, executor_config);
+};
 
 
 
 main(process.argv, process.argv.length);
+
+}) ();

@@ -14,12 +14,20 @@ var
 
 
 
-var redisLoop = function(o) {
+var redisLoop = function(redis_config, executor_config) {
 
-  var conf = o.config;
-  var commands = o.commands;
+  var commands = process.env.DARK_CMD;
+  if (commands === undefined) {
+    console.error("DARK_CMD environment variable not defined: should point to the commands/ directory");
+    process.exit(1);
+  }
 
-  var redis_url = "redis://" + conf.redis.host + ":" + conf.redis.port;
+  if (executor_config.prefix === undefined) {
+    console.error("executor_config: prefix must be specified");
+    process.exit(1);
+  }
+
+  var redis_url = "redis://" + redis_config.redis.host + ":" + redis_config.redis.port;
 
 
 
@@ -43,6 +51,7 @@ var redisLoop = function(o) {
   });
 
   sub.on('message', function(channel,data) {
+
     var json = JSON.parse(data);
 
     switch(channel) {
@@ -62,9 +71,9 @@ var redisLoop = function(o) {
 
         var dark_message = irc_message[4].replace(/\0/g, '');
 
-        if (_.head(dark_message) == ".") {
+        if (_.startsWith(dark_message, executor_config.prefix)) {
 
-          var rest = _.tail(dark_message);
+          var rest = _.drop(dark_message, executor_config.prefix.length);
           var argv = ArgParser.parse(ArgParser.defaultParseOptions, rest);
           console.log("TRIGGER", argv);
 
@@ -109,6 +118,9 @@ var redisLoop = function(o) {
           } catch (err) {
             console.log("CATCH:", err);
           }
+        } else if (dark_message === "executor!?") {
+          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, "I'm here and my prefix is: " + executor_config.prefix);
+          pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
         }
 
         break;
