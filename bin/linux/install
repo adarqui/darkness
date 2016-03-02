@@ -99,3 +99,23 @@ fi
 if [ ! -f "`which gst`" ] ; then
   apt-get -y install gnu-smalltalk
 fi
+
+
+
+#
+# ocaml
+#
+
+if [ ! -f "`which ocamlc`" ] ; then
+  apt-get -y install ocaml
+fi
+
+
+
+#
+# erlang
+#
+
+if [ ! -f "`which erlc`" ] ; then
+  apt-get -y install erlang
+fi
