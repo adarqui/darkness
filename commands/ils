@@ -8,6 +8,6 @@ if [ `echo "$1" | grep '\.'` ] ; then
   exit 1
 fi
 
-ls "$1"/*.itxt | while read line; do
+ls "$1"/*.itxt 2>/dev/null | while read line; do
   basename "${line}" | sed s/"\.itxt"//g
 done | xargs
