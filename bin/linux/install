@@ -83,3 +83,19 @@ fi
 
 
 
+#
+# gnu prolog
+#
+
+if [ ! -f "`which gplc`" ] ; then
+  apt-get -y install gprolog
+fi
+
+
+#
+# gnu smalltalk
+#
+
+if [ ! -f "`which gst`" ] ; then
+  apt-get -y install gnu-smalltalk
+fi
