@@ -119,7 +119,7 @@ var redisLoop = function(redis_config, executor_config) {
             console.log("CATCH:", err);
           }
         } else if (dark_message === "executor!?") {
-          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, "I'm here and my prefix is: " + executor_config.prefix);
+          var privmsg = DarkIrc.prepare_reply_privmsg(irc_message, "my prefix is: " + executor_config.prefix);
           pub.publish(DarkKeys.mkRelayServer(json.server.label), JSON.stringify(DarkEvents.mkAuthoredEvent(json.server, DarkEvents.raw(0, privmsg))));
         }
 
