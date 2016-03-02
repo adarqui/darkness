@@ -26,6 +26,8 @@ fi
 echo 'export PATH=$PATH:/usr/local/go/bin' > /etc/profile.d/go.sh
 chmod 755 /etc/profile.d/go.sh
 
+export PATH=$PATH:/usr/local/go/bin
+
 
 #
 # node.js
@@ -37,6 +39,8 @@ fi
 
 echo 'export PATH=$PATH:/usr/local/node-v4.3.1-linux-x64/bin' > /etc/profile.d/node.sh
 chmod 755 /etc/profile.d/node.sh
+
+export PATH=$PATH:/usr/local/node-v4.3.1-linux-x64/bin
 
 npm update
 
