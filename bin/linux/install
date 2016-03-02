@@ -70,3 +70,16 @@ fi
 #
 npm install -g purescript
 npm install -g pulp
+
+
+
+#
+# gnu fortran
+#
+
+if [ ! -f "`which gfortran`" ] ; then
+  apt-get -y install gfortran
+fi
+
+
+
