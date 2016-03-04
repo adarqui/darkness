@@ -82,7 +82,7 @@ var redisLoop = function(redis_config, executor_config) {
             return;
           }
 
-          if (executor_config.ignore !== undefined && _.findIndex(executor_config.ignore, function(v) { return (v == _.head(argv)); })) {
+          if (executor_config.ignore !== undefined && (_.findIndex(executor_config.ignore, function(v) { return (v == _.head(argv)); }) !== (-1))) {
             /*
              * If the ignore array exists, ignore this command if it exists in the array
              *
@@ -91,7 +91,7 @@ var redisLoop = function(redis_config, executor_config) {
             return;
           }
 
-          if (executor_config.accept !== undefined && !_.findIndex(executor_config.accept, function(v) { return (v == _.head(argv)); })) {
+          if (executor_config.accept !== undefined && (_.findIndex(executor_config.accept, function(v) { return (v == _.head(argv)); }) === (-1))) {
             /*
              * If the accept array exists, only execute command if it exists in this array
              *
