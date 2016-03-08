@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Darkness.Commands.Private.LOC (
   findFilesBySuffix,
   countLinesOfFiles
