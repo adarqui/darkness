@@ -19,7 +19,8 @@ findFilesBySuffix suffixes path = do
   find
     always
     (
-      fileType ==? RegularFile &&?
+      fileType ==? RegularFile
+      &&?
       (extension >>= \ext -> return $ elem ext suffixes)
     )
     canonical
