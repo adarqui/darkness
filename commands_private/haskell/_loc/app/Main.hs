@@ -19,11 +19,7 @@ usage = do
 
 main :: IO ()
 main = do
-
   argv <- getArgs
   case argv of
-    (directory:file_extensions) -> do
-      results <- findFilesBySuffix file_extensions directory >>= countLinesOfFiles
-      putStrLn $ show results
-      return ()
+    (directory:file_extensions) -> findFilesBySuffix file_extensions directory >>= countLinesOfFiles >>= putStrLn . show
     _ -> usage
