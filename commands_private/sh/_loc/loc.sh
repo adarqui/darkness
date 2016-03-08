@@ -11,7 +11,7 @@ function join {
 
 
 if [ $# -lt 2 ] ; then
-  echo "usage: $0 <dir> <file_extension_1> <file_extensions_2>";
+  echo "usage: $0 <dir> <file_extension_1> ... <file_extensions_n>";
   echo "ex: $0 ./ .hs .c .purs";
   exit 1;
 fi
