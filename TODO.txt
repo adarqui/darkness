@@ -37,3 +37,6 @@ commands:
 - youtube
 - boxrec
 - sherdog
+
+repls:
+- lambdabot style repl .. repl's for various languages
