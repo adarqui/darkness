@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Darkness.Listeners.Triggers (serviceMain)
 
 main :: IO ()
-main = someFunc
+main = serviceMain

@@ -1,5 +1,5 @@
 flags: {}
 packages:
 - '.'
-extra-deps: []
-resolver: lts-3.2
+extra-deps: [optparse-generic-1.0.0]
+resolver: lts-5.5

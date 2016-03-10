@@ -4,7 +4,10 @@ opt_n=1;
 start_index=0;
 argv=("$@");
 
-if [ $# -ge 1 ] && [ $1 = "-n" ]; then
+if [ $1 = "-n" ]; then
+  if (( $# == 1 )) ; then
+    exit 0;
+  fi
   opt_n=0;
   (( start_index+=1 ));
   shift
