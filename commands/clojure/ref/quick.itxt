@@ -1,0 +1,2 @@
+lein new app some_application
+lein new some_library

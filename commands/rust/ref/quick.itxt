@@ -1,0 +1,2 @@
+cargo new app_name --bin
+cargo new lib_name
