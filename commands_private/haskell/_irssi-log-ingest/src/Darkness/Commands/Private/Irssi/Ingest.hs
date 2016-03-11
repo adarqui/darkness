@@ -51,7 +51,7 @@ parseMessage (ts, Message offset mode nick content) = do
 parseTriggerAccess :: UTCTime -> Nickname -> MessageContent -> IO ()
 parseTriggerAccess ts nick content = do
   T.putStrLn $ nick <> " accessed trigger " <> key
-  try (runClientGetTrigger "efnet_jumping" key) :: IO (Either SomeException (Either String TriggerResponse))
+  try (runClientGetTriggerAuthored "efnet_jumping" key nick) :: IO (Either SomeException (Either String TriggerResponse))
   return ()
   where
   key = T.takeWhile (/= ' ') content
