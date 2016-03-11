@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# stack exec vping-exe $@
-"${DARK_ROOT}"/commands/haskell/_vping/.stack-work/install/*/*/*/bin/vping-exe

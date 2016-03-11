@@ -1,8 +1,9 @@
 build:
 	stack build
+	stack install --local-bin-path ./bin
 
 clean:
 	stack clean
 
-run:
-	stack exec vping-exe
+test:
+	stack test
