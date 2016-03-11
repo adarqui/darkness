@@ -27,7 +27,6 @@ library
                      , either >= 4.4.1
                      , monad-logger >= 0.3.18
                      , mtl >= 2.2.1
-                     , optparse-generic
                      , servant >= 0.4.4.6
                      , servant-docs
                      , servant-server

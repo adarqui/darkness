@@ -13,10 +13,10 @@ module Darkness.Listeners.Triggers.Types (
 
 import           Control.Monad   (mzero)
 import           Data.Aeson
+import           Data.Text       (Text)
 import           Data.Time       (UTCTime)
 import           Data.Typeable   (Typeable)
-import           GHC.Generics    ()
-import           Options.Generic
+import           GHC.Generics    (Generic)
 
 
 
@@ -49,10 +49,6 @@ instance ToJSON TriggerRequest where
     , "key" .= triggerRequestKey
     , "value" .= triggerRequestValue
     ]
-
-
-
-instance ParseRecord TriggerRequest
 
 
 
