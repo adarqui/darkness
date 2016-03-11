@@ -1,8 +1,9 @@
 build:
 	stack build
+	stack install --local-bin-path ./bin
 
 clean:
 	stack clean
 
-run:
-	stack exec echo-exe
+test:
+	stack test
