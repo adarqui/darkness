@@ -1,0 +1,9 @@
+flags: {}
+packages:
+- '.'
+- '../../../listeners/haskell/triggers'
+- location:
+    git: https://github.com/adarqui/haskell-irssi-log-parser
+    commit: 388c99491e65db5f620287a494434cb48932c2b1
+extra-deps: []
+resolver: lts-5.5
