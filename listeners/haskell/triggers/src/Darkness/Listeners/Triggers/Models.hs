@@ -34,6 +34,7 @@ import           Darkness.Listeners.Triggers.Types  (TriggerRequest (..),
 
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+
 Trigger
   author         Text
   authorMeta     Text Maybe
@@ -46,6 +47,16 @@ Trigger
   lastAccessedAt UTCTime
   UniqueTrigger  namespace key
   deriving       Eq Show Typeable
+
+TriggerAccessHistory
+  triggerId      TriggerId
+  author         Text
+  authorMeta     Text Maybe
+  namespace      Text
+  key            Text
+  createdAt      UTCTime
+  deriving       Eq Show Typeable
+
 |]
 
 

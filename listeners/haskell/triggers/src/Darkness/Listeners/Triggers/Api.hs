@@ -30,6 +30,7 @@ type TriggerAPI =
          "triggers" :> Get '[JSON] [TriggerResponse]
     :<|> "triggers" :> Capture "ns" Text :> Get '[JSON] [TriggerResponse]
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Get '[JSON] TriggerResponse
+    :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Capture "author" Text :> Get '[JSON] TriggerResponse
     :<|> "triggers" :> ReqBody '[JSON] TriggerRequest :> Post '[JSON] TriggerResponse
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> ReqBody '[JSON] TriggerRequest :> Put '[JSON] TriggerResponse
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Delete '[JSON] ()
@@ -61,7 +62,7 @@ readerToEither cfg = Nat $ \x -> runReaderT x cfg
 
 
 server :: ServerT TriggerAPI AppM
-server = apiGetAllTriggers :<|> apiGetTriggers :<|> apiGetTrigger :<|> apiCreateTrigger :<|> apiUpdateTrigger :<|> apiDeleteTrigger
+server = apiGetAllTriggers :<|> apiGetTriggers :<|> apiGetTrigger :<|> apiGetTriggerAuthored :<|> apiCreateTrigger :<|> apiUpdateTrigger :<|> apiDeleteTrigger
 
 
 
@@ -89,6 +90,19 @@ apiGetTrigger ns key = do
     Nothing -> lift $ left err404
     (Just (Entity trigger_id trigger)) -> do
       runDb $ update trigger_id [ TriggerCounter +=. 1, TriggerLastAccessedAt =. now ]
+      return $ triggerToTriggerResponse trigger
+
+
+
+apiGetTriggerAuthored :: Text -> Text -> Text -> AppM TriggerResponse
+apiGetTriggerAuthored ns key author = do
+  now <- liftIO getCurrentTime
+  mtrigger <- runDb $ selectFirst [ TriggerNamespace ==. ns, TriggerKey ==. key ] []
+  case mtrigger of
+    Nothing -> lift $ left err404
+    (Just (Entity trigger_id trigger)) -> do
+      runDb $ update trigger_id [ TriggerCounter +=. 1, TriggerLastAccessedAt =. now ]
+      runDb $ insert $ TriggerAccessHistory trigger_id author Nothing ns key now
       return $ triggerToTriggerResponse trigger
 
 

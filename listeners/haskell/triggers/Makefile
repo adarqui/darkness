@@ -9,7 +9,7 @@ clean:
 	stack clean
 
 run:
-	stack exec -- dark-listener-haskell-triggers
+	./bin/dark-listener-haskell-triggers
 
 test:
 	stack test
