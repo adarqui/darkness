@@ -1,27 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Darkness.Commands.Private.Irssi.Ingest (
-  ingest
+  ingestTriggers
 ) where
 
 
 
-import Control.Monad
-import Control.Exception
-import qualified Data.Text as T
-import qualified Data.Text.IO as T
-import Data.Monoid ((<>))
-import Data.Time (UTCTime)
+import           Control.Exception            (SomeException, try)
+import           Data.Monoid                  ((<>))
+import qualified Data.Text                    as T (breakOn, drop, takeWhile,
+                                                    uncons)
+import qualified Data.Text.IO                 as T (putStrLn)
+import           Data.Time                    (UTCTime)
 
-import Parser.Irssi.Log.Types
-import Parser.Irssi.Log.Util.Import
+import           Parser.Irssi.Log.Types
+import           Parser.Irssi.Log.Util.Import
 
-import Darkness.Listeners.Triggers
+import           Darkness.Listeners.Triggers
 
 
 
-ingest :: FilePath -> IO ()
-ingest path = do
+ingestTriggers :: FilePath -> IO ()
+ingestTriggers path = do
   logs <- importIrssiData path
   mapM parseLine logs
   return ()

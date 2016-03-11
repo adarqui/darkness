@@ -2,14 +2,12 @@ module Main where
 
 
 
-import Control.Monad
-import System.Exit
-import System.Environment
-import qualified Data.Text as T
-import qualified Data.Text.IO as T
-import System.IO
+import           Control.Monad                          (mapM)
+import           System.Environment                     (getArgs)
+import           System.Exit                            (ExitCode (..),
+                                                         exitWith)
 
-import           Darkness.Commands.Private.Irssi.Ingest
+import           Darkness.Commands.Private.Irssi.Ingest (ingestTriggers)
 
 
 
@@ -26,4 +24,4 @@ main = do
   case argv of
     [] -> usage
     _  -> do
-      mapM_ ingest argv
+      mapM_ ingestTriggers argv
