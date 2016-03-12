@@ -12,5 +12,8 @@
 # stop command executor
 (cd core/nodejs/temp/executor; make kill)
 
+# stop triggers service
+(cd listeners/haskell/triggers; make kill)
+
 # stop relay daemon
 (cd core/go/relay; make kill)

@@ -14,5 +14,8 @@
 # start command executor
 (cd core/nodejs/temp/executor; make build; make run &)
 
+# start triggers service
+(cd listeners/haskell/triggers; make build; make run &)
+
 # start relay daemon
 (cd core/go/relay; make build; make run &)
