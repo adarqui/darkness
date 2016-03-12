@@ -10,3 +10,6 @@ clean:
 
 test:
 	stack test
+
+deps:
+	apt-get -y install libpcre3 libpcre3-dev
