@@ -107,13 +107,19 @@ var redisLoop = function(redis_config, executor_config) {
             var exe = "./bin/" + _.head(argv);
 
             var user_info = DarkIrc.parseUser(irc_message[1]);
-            var env = {
-              "DARK_EXEC_IRC_USER": irc_message[1],
-              "DARK_EXEC_IRC_NICK": user_info.nick,
-              "DARK_EXEC_IRC_IDENT": user_info.ident,
-              "DARK_EXEC_IRC_HOST": user_info.host,
-              "DARK_EXEC_IRC_CHANNEL": irc_message[3]
-            };
+            var env = _.clone(process.env);
+
+            env.DARK_EXEC_SERVER_LABEL = json.server.label;
+            env.DARK_EXEC_SERVER_SESSION = json.server.session;
+            env.DARK_EXEC_SERVER_HOST = json.server.host;
+            env.DARK_EXEC_SERVER_PORT = json.server.port;
+            env.DARK_EXEC_SERVER_PROTOCOL = json.server.port;
+            env.DARK_EXEC_IRC_USER = irc_message[1];
+            env.DARK_EXEC_IRC_NICK = user_info.nick;
+            env.DARK_EXEC_IRC_IDENT = user_info.ident;
+            env.DARK_EXEC_IRC_HOST = user_info.host;
+            env.DARK_EXEC_IRC_CHANNEL = irc_message[3];
+
             var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands, env: env });
 
             console.log("EXE", exe, "ARGV", _.tail(argv), "CWD", commands);
