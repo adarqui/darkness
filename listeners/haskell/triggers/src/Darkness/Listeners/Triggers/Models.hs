@@ -48,6 +48,15 @@ Trigger
   UniqueTrigger  namespace key
   deriving       Eq Show Typeable
 
+TriggerMissing
+  author         Text
+  authorMeta     Text Maybe
+  namespace      Text
+  key            Text
+  value          Text
+  createdAt      UTCTime DEFAULT=now()
+  deriving       Eq Show Typeable
+
 TriggerAccessHistory
   triggerId      TriggerId
   author         Text

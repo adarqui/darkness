@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds       #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TypeOperators   #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Darkness.Listeners.Triggers.Api where
 
@@ -94,12 +95,19 @@ apiGetTrigger ns key = do
 
 
 
+-- | This hacked up function was created for ingesting my irssi logs.
+-- It creates a trigger if someone tries to access it and it doesn't exist..
+-- Now we just need to be able to override
+--
 apiGetTriggerAuthored :: Text -> Text -> Text -> AppM TriggerResponse
 apiGetTriggerAuthored ns key author = do
   now <- liftIO getCurrentTime
   mtrigger <- runDb $ selectFirst [ TriggerNamespace ==. ns, TriggerKey ==. key ] []
   case mtrigger of
-    Nothing -> lift $ left err404
+    Nothing -> do
+      -- lets create it anyway? missing table..
+      -- apiCreateTrigger $ TriggerRequest author (Just "not_found") ns key ""
+      lift $ left err404
     (Just (Entity trigger_id trigger)) -> do
       runDb $ update trigger_id [ TriggerCounter +=. 1, TriggerLastAccessedAt =. now ]
       runDb $ insert $ TriggerAccessHistory trigger_id author Nothing ns key now
