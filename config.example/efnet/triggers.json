@@ -1,5 +1,6 @@
 {
+  "host": "localhost",
   "port": 65401,
-  "db": "triggers_prod.db",
-  "env": "production"
+  "db":   "triggers_prod.db",
+  "env":  "production"
 }
