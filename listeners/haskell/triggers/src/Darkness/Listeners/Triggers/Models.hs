@@ -77,7 +77,7 @@ doMigrations = runMigration migrateAll
 
 -- runDb :: forall (m :: * -> *) b. (MonadIO m, Config m) => SqlPersistT IO b -> m b
 runDb query = do
-    pool <- asks getPool
+    pool <- asks configPool
     liftIO $ runSqlPool query pool
 
 

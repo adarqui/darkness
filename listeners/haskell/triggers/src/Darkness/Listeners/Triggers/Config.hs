@@ -1,24 +1,51 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module Darkness.Listeners.Triggers.Config where
 
 
 
+import           Control.Monad                        (mzero)
 import           Control.Monad.Logger                 (runNoLoggingT,
                                                        runStdoutLoggingT)
-import           Data.Text                            (Text)
+import           Data.Aeson
+import qualified Data.ByteString.Lazy.Char8           as BSLC
+import qualified Data.Text                            as T (pack)
 import           Network.Wai                          (Middleware)
 import           Network.Wai.Middleware.RequestLogger (logStdout, logStdoutDev)
+import           System.Environment                   (lookupEnv)
 
 import           Database.Persist.Sqlite              (ConnectionPool,
                                                        createSqlitePool)
 
 
 
+data PublicConfig = PublicConfig {
+    publicConfigHost :: String
+  , publicConfigPort :: Int
+  , publicConfigEnv  :: Environment
+  , publicConfigDb   :: FilePath
+}
+
+
+
+instance FromJSON PublicConfig where
+  parseJSON (Object o) = PublicConfig
+    <$> o .: "host"
+    <*> o .: "port"
+    <*> o .: "port"
+    <*> o .: "db"
+  parseJSON _ = mzero
+
+
+
 data Config = Config {
-    getPool :: ConnectionPool
-  , getEnv  :: Environment
-  , getDb   :: FilePath
+    configPool       :: ConnectionPool
+  , configDataPrefix :: FilePath
+  , configHost       :: String
+  , configPort       :: Int
+  , configEnv        :: Environment
+  , configDb         :: FilePath
 }
 
 
@@ -27,16 +54,44 @@ data Environment =
     Development
   | Test
   | Production
-  deriving (Eq, Show, Read)
 
 
 
-defaultConfig :: Config
-defaultConfig = Config {
-    getPool = undefined
-  , getEnv  = Development
-  , getDb   = undefined
+instance FromJSON Environment where
+  parseJSON (String "development") = pure Development
+  parseJSON (String "test") = pure Test
+  parseJSON (String "production") = pure Production
+  parseJSON _ = mzero
+
+
+
+defaultPublicConfig :: PublicConfig
+defaultPublicConfig = PublicConfig {
+    publicConfigHost = triggersServiceHost
+  , publicConfigPort = triggersServicePort
+  , publicConfigEnv  = triggersServiceEnv
+  , publicConfigDb   = triggersServiceDb
 }
+
+
+
+publicConfigToInternalConfig :: PublicConfig -> IO Config
+publicConfigToInternalConfig PublicConfig{..} = do
+  dark_data <- lookupSetting "DARK_DATA" "/tmp"
+  pool <- (case publicConfigEnv of
+    Test -> runNoLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool Test)
+    e    -> runStdoutLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool e))
+  return $ Config pool dark_data publicConfigHost publicConfigPort publicConfigEnv publicConfigDb
+
+
+
+-- too lazy to parse error types right now
+readPublicConfig :: FilePath -> IO PublicConfig
+readPublicConfig config_path = do
+  v <- eitherDecode <$> BSLC.readFile config_path
+  case v of
+    (Left err) -> error err
+    (Right v') -> pure v'
 
 
 
@@ -47,11 +102,6 @@ setLogger Production = logStdout
 
 
 
-makePool :: Environment -> IO ConnectionPool
-makePool Test = runNoLoggingT $ createSqlitePool (connStr Test) (envPool Test)
-makePool e = runStdoutLoggingT $ createSqlitePool (connStr e) (envPool e)
-
-
 
 envPool :: Environment -> Int
 envPool Test = 1
@@ -60,9 +110,13 @@ envPool Production = 8
 
 
 
--- connStr :: Environment -> ConnectionString
-connStr :: Environment -> Text
-connStr _ = "/tmp/test.db"
+lookupSetting :: Read a => String -> a -> IO a
+lookupSetting env def = do
+    p <- lookupEnv env
+    return $
+      case p of
+        Nothing -> def
+        Just a  -> read a
 
 
 
@@ -76,5 +130,10 @@ triggersServicePort = 65401
 
 
 
-triggersServiceDbPath :: FilePath
-triggersServiceDbPath = "/tmp/triggers.db"
+triggersServiceEnv :: Environment
+triggersServiceEnv = Development
+
+
+
+triggersServiceDb :: FilePath
+triggersServiceDb = "test.db"

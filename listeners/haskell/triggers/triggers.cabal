@@ -24,6 +24,7 @@ library
                      , Darkness.Listeners.Triggers.Types
   build-depends:       base >= 4.8 && < 5
                      , aeson
+                     , bytestring
                      , either >= 4.4.1
                      , monad-logger >= 0.3.18
                      , mtl >= 2.2.1

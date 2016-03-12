@@ -1,0 +1,5 @@
+{
+  "port": 65401,
+  "db": "triggers_dev.db",
+  "env": "development"
+}

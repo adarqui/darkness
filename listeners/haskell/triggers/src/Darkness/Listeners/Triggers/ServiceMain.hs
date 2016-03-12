@@ -6,37 +6,23 @@ module Darkness.Listeners.Triggers.ServiceMain (
 
 import           Database.Persist.Sqlite            (runSqlPool)
 import           Network.Wai.Handler.Warp           (run)
-import           System.Environment                 (lookupEnv)
 
 import           Darkness.Listeners.Triggers.Api    (app)
-import           Darkness.Listeners.Triggers.Config (Config (..),
-                                                     Environment (..),
-                                                     defaultConfig, makePool,
-                                                     setLogger,
-                                                     triggersServiceDbPath,
-                                                     triggersServicePort)
+import           Darkness.Listeners.Triggers.Config (Config (..), publicConfigToInternalConfig,
+                                                     readPublicConfig,
+                                                     setLogger)
 import           Darkness.Listeners.Triggers.Models (doMigrations)
 
 
 
-serviceMain :: IO ()
-serviceMain = do
-    env  <- lookupSetting "ENV" Development
-    port <- lookupSetting "PORT" triggersServicePort
-    path <- lookupSetting "TRIGGERS_DB_PATH" triggersServiceDbPath
-    pool <- makePool env
+serviceMain :: FilePath -> IO ()
+serviceMain config_path = do
+
+    public_config <- readPublicConfig config_path
+    cfg <- publicConfigToInternalConfig public_config
+
     let
-      cfg    = defaultConfig { getPool = pool, getEnv = env, getDb = path }
-      logger = setLogger env
-    runSqlPool doMigrations pool
-    run port $ logger $ app cfg
+      logger = setLogger (configEnv cfg)
 
-
-
-lookupSetting :: Read a => String -> a -> IO a
-lookupSetting env def = do
-    p <- lookupEnv env
-    return $
-      case p of
-        Nothing -> def
-        Just a  -> read a
+    runSqlPool doMigrations (configPool cfg)
+    run (configPort cfg) $ logger $ app cfg
