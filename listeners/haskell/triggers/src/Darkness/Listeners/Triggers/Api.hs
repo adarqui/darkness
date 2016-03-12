@@ -15,11 +15,12 @@ import           Control.Monad.Trans.Either         (EitherT, left)
 import           Data.Text                          (Text)
 import qualified Data.Text                          as T (pack, unpack)
 import           Data.Time                          (UTCTime, getCurrentTime)
-import           Database.Persist.Postgresql        (Entity (..), deleteWhere,
+import           Database.Persist                   (Entity (..), deleteWhere,
                                                      get, insert, selectFirst,
                                                      selectList, update,
                                                      updateGet, (+=.), (=.),
                                                      (==.))
+
 import           Network.Wai                        (Application)
 import           Servant
 
