@@ -43,8 +43,8 @@ runClientGetTrigger ns key mauthor mts = fixResult <$> runEitherT (clientGetTrig
 
 
 
-runClientCreateTrigger :: TriggerRequest -> IO (Either String TriggerResponse)
-runClientCreateTrigger trigger_request = fixResult <$> runEitherT (clientCreateTrigger trigger_request)
+runClientCreateTrigger :: TriggerRequest -> Maybe UTCTime -> IO (Either String TriggerResponse)
+runClientCreateTrigger trigger_request mts = fixResult <$> runEitherT (clientCreateTrigger trigger_request mts)
 
 
 

@@ -66,8 +66,7 @@ parseMessage (ts, Message offset mode nick content) = do
     (Just (nick, key, ts')) -> do
       liftIO (
         try
-          (runClientCreateTrigger $
-            TriggerRequest nick Nothing "efnet_jumping" key content) :: IO (Either SomeException (Either String TriggerResponse)))
+          (runClientCreateTrigger (TriggerRequest nick Nothing "efnet_jumping" key content) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
       put $ TriggerState Nothing
 
 
@@ -93,7 +92,7 @@ parseTriggerAccess ts nick content = do
 
   result <- liftIO (
     try (
-      runClientGetTrigger "efnet_jumping" key (Just nick) Nothing) :: IO (Either SomeException (Either String TriggerResponse)))
+      runClientGetTrigger "efnet_jumping" key (Just nick) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
 
   case result of
     (Left e) -> liftIO $ putStrLn "error"
@@ -115,8 +114,8 @@ parseTriggerCreation ts nick content = do
   liftIO $ T.putStrLn $ nick <> " added trigger " <> key <> " with content " <> value
 
   void $ liftIO (
-    try (
-      runClientCreateTrigger $ TriggerRequest nick Nothing "efnet_jumping" key value) :: IO (Either SomeException (Either String TriggerResponse)))
+    try
+      (runClientCreateTrigger (TriggerRequest nick Nothing "efnet_jumping" key value) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
 
   where
   (key, value') = T.breakOn " " content
