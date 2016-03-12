@@ -1,3 +1,1 @@
-#!/bin/bash
-
-node ../nodejs/_urban/main.js $@
+../nodejs/urban
