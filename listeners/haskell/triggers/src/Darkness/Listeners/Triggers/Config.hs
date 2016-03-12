@@ -71,10 +71,15 @@ publicConfigToInternalConfig :: PublicConfig -> IO Config
 publicConfigToInternalConfig PublicConfig{..} = do
 --  dark_data <- lookupSetting "DARK_DATA" "/tmp"
   dark_data <- getEnv "DARK_DATA"
+
+  let
+    abs_path = dark_data <> "/" <> publicConfigDb
+
   pool <- (case publicConfigEnv of
-    Test -> runNoLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool Test)
-    e    -> runStdoutLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool e))
-  return $ Config pool dark_data publicConfigHost publicConfigPort publicConfigEnv (dark_data <> "/" <> publicConfigDb)
+    Test -> runNoLoggingT $ createSqlitePool (T.pack abs_path) (envPool Test)
+    e    -> runStdoutLoggingT $ createSqlitePool (T.pack abs_path) (envPool e))
+
+  return $ Config pool dark_data publicConfigHost publicConfigPort publicConfigEnv abs_path
 
 
 
