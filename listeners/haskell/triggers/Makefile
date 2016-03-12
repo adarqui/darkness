@@ -12,7 +12,7 @@ test:
 	stack test
 
 deps:
-	echo deps
+	apt-get -y install sqlite3
 
 run:
 	./bin/dark-listener-haskell-triggers "${DARK_CONFIGS}/triggers.json" 1>> "${DARK_LOGS}/haskell/triggers.stdout.log" 2>> "${DARK_LOGS}/haskell/triggers.stderr.log"
