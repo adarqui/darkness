@@ -7,6 +7,7 @@ module Darkness.Listeners.Triggers.Api.Client where
 
 import           Control.Monad.Trans.Either         (EitherT, left, runEitherT)
 import           Data.Text                          (Text)
+import Data.Time (UTCTime)
 import           Servant
 import           Servant.Client
 
@@ -23,7 +24,7 @@ clientApi = Proxy
 
 
 
-clientGetAllTriggers :<|> clientGetTriggers :<|> clientGetTrigger :<|> clientGetTriggerAuthored :<|> clientCreateTrigger :<|> clientUpdateTrigger :<|> clientDeleteTrigger = client clientApi (BaseUrl Http triggersServiceHost triggersServicePort)
+clientGetAllTriggers :<|> clientGetTriggers :<|> clientGetTrigger :<|> clientCreateTrigger :<|> clientUpdateTrigger :<|> clientDeleteTrigger = client clientApi (BaseUrl Http triggersServiceHost triggersServicePort)
 
 
 
@@ -37,13 +38,8 @@ runClientGetTriggers ns = fixResult <$> runEitherT (clientGetTriggers ns)
 
 
 
-runClientGetTrigger :: Text -> Text -> IO (Either String TriggerResponse)
-runClientGetTrigger ns key = fixResult <$> runEitherT (clientGetTrigger ns key)
-
-
-
-runClientGetTriggerAuthored :: Text -> Text -> Text -> IO (Either String TriggerResponse)
-runClientGetTriggerAuthored ns key author = fixResult <$> runEitherT (clientGetTriggerAuthored ns key author)
+runClientGetTrigger :: Text -> Text -> Maybe Text -> Maybe UTCTime -> IO (Either String TriggerResponse)
+runClientGetTrigger ns key mauthor mts = fixResult <$> runEitherT (clientGetTrigger ns key mauthor mts)
 
 
 

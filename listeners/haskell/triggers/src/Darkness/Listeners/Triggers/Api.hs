@@ -2,16 +2,18 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TypeOperators   #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE InstanceSigs #-}
 
 module Darkness.Listeners.Triggers.Api where
 
 
 
+import Control.Monad (void)
 import           Control.Monad.IO.Class             (liftIO)
 import           Control.Monad.Reader               (ReaderT, lift, runReaderT)
 import           Control.Monad.Trans.Either         (EitherT, left)
 import           Data.Text                          (Text)
-import           Data.Time                          (getCurrentTime)
+import           Data.Time                          (UTCTime, getCurrentTime)
 import           Database.Persist.Postgresql        (Entity (..), deleteWhere,
                                                      get, insert, selectFirst,
                                                      selectList, update,
@@ -30,8 +32,8 @@ import           Darkness.Listeners.Triggers.Types  (TriggerRequest (..),
 type TriggerAPI =
          "triggers" :> Get '[JSON] [TriggerResponse]
     :<|> "triggers" :> Capture "ns" Text :> Get '[JSON] [TriggerResponse]
-    :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Get '[JSON] TriggerResponse
-    :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Capture "author" Text :> Get '[JSON] TriggerResponse
+    :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> QueryParam "author" Text :> QueryParam "ts" UTCTime :> Get '[JSON] TriggerResponse
+--    :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Capture "author" Text :> Get '[JSON] TriggerResponse
     :<|> "triggers" :> ReqBody '[JSON] TriggerRequest :> Post '[JSON] TriggerResponse
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> ReqBody '[JSON] TriggerRequest :> Put '[JSON] TriggerResponse
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Delete '[JSON] ()
@@ -39,6 +41,18 @@ type TriggerAPI =
 
 
 type AppM = ReaderT Config (EitherT ServantErr IO)
+
+
+
+instance FromText UTCTime where
+  fromText :: Text -> Maybe UTCTime
+  fromText _ = Nothing
+
+
+
+instance ToText UTCTime where
+  toText :: a -> Text
+  toText utc = ""
 
 
 
@@ -63,7 +77,7 @@ readerToEither cfg = Nat $ \x -> runReaderT x cfg
 
 
 server :: ServerT TriggerAPI AppM
-server = apiGetAllTriggers :<|> apiGetTriggers :<|> apiGetTrigger :<|> apiGetTriggerAuthored :<|> apiCreateTrigger :<|> apiUpdateTrigger :<|> apiDeleteTrigger
+server = apiGetAllTriggers :<|> apiGetTriggers :<|> apiGetTrigger :<|> apiCreateTrigger :<|> apiUpdateTrigger :<|> apiDeleteTrigger
 
 
 
@@ -83,14 +97,19 @@ apiGetTriggers ns = do
 
 
 
-apiGetTrigger :: Text -> Text -> AppM TriggerResponse
-apiGetTrigger ns key = do
+apiGetTrigger :: Text -> Text -> Maybe Text -> Maybe UTCTime -> AppM TriggerResponse
+apiGetTrigger ns key mauthor mts = do
   now <- liftIO getCurrentTime
   mtrigger <- runDb $ selectFirst [ TriggerNamespace ==. ns, TriggerKey ==. key ] []
   case mtrigger of
     Nothing -> lift $ left err404
     (Just (Entity trigger_id trigger)) -> do
       runDb $ update trigger_id [ TriggerCounter +=. 1, TriggerLastAccessedAt =. now ]
+
+      case mauthor of
+        Nothing -> return ()
+        (Just author) -> void $ runDb $ insert $ TriggerAccessHistory trigger_id author Nothing ns key now
+
       return $ triggerToTriggerResponse trigger
 
 
@@ -99,6 +118,7 @@ apiGetTrigger ns key = do
 -- It creates a trigger if someone tries to access it and it doesn't exist..
 -- Now we just need to be able to override
 --
+{-
 apiGetTriggerAuthored :: Text -> Text -> Text -> AppM TriggerResponse
 apiGetTriggerAuthored ns key author = do
   now <- liftIO getCurrentTime
@@ -112,6 +132,7 @@ apiGetTriggerAuthored ns key author = do
       runDb $ update trigger_id [ TriggerCounter +=. 1, TriggerLastAccessedAt =. now ]
       runDb $ insert $ TriggerAccessHistory trigger_id author Nothing ns key now
       return $ triggerToTriggerResponse trigger
+-}
 
 
 

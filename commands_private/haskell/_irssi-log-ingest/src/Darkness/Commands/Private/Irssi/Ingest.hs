@@ -93,7 +93,7 @@ parseTriggerAccess ts nick content = do
 
   result <- liftIO (
     try (
-      runClientGetTriggerAuthored "efnet_jumping" key nick) :: IO (Either SomeException (Either String TriggerResponse)))
+      runClientGetTrigger "efnet_jumping" key (Just nick) Nothing) :: IO (Either SomeException (Either String TriggerResponse)))
 
   case result of
     (Left e) -> liftIO $ putStrLn "error"

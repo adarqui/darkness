@@ -136,7 +136,7 @@ run (Options CommandOptions{..} sub) = do
   case sub of
     GetAllTriggers         -> runClientGetAllTriggers >>= putJSON
     (GetTriggers ns)       -> runClientGetTriggers ns >>= putJSON
-    (GetTrigger ns key)    -> runClientGetTrigger ns key >>= putJSON
+    (GetTrigger ns key)    -> runClientGetTrigger ns key Nothing Nothing >>= putJSON
     (DeleteTrigger ns key) -> runClientDeleteTrigger ns key >>= putJSON
     (CreateTrigger ns key value' author author_meta) -> runClientCreateTrigger (TriggerRequest author author_meta ns key value') >>= putJSON
     (UpdateTrigger orig_ns orig_key new_ns new_key new_value' new_author new_author_meta) ->
