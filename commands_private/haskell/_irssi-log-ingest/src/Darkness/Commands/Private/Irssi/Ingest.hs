@@ -9,11 +9,12 @@ module Darkness.Commands.Private.Irssi.Ingest (
 import           Control.Exception            (SomeException, try)
 import           Control.Monad                (void)
 import           Control.Monad.IO.Class       (liftIO)
-import           Control.Monad.Trans.State    (StateT, evalStateT, gets, put, modify)
+import           Control.Monad.Trans.State    (StateT, evalStateT, gets, modify,
+                                               put)
 import           Data.Monoid                  ((<>))
 import           Data.Text                    (Text)
-import qualified Data.Text                    as T (breakOn, drop, takeWhile,
-                                                    uncons)
+import qualified Data.Text                    as T (breakOn, drop, isPrefixOf,
+                                                    takeWhile, uncons)
 import qualified Data.Text.IO                 as T (putStrLn)
 import           Data.Time                    (UTCTime)
 
@@ -30,7 +31,7 @@ type Namespace = Text
 
 data TriggerState = TriggerState {
     stCurrentQueryTrigger :: Maybe (Nickname, MessageContent, UTCTime)
-  , stNamespace :: Namespace
+  , stNamespace           :: Namespace
 } deriving (Eq, Show)
 
 
@@ -72,12 +73,25 @@ parseMessage (ts, Message offset mode nick content) = do
     -- Here we are told that a previous query returned 404, so, we rely on the idea that the very next
     -- line is perhaps the trigger response from the bot. This way we can add triggers that were added
     -- prior to 2011, which we don't have in the logs.
+    --
+    -- don't add the key if content matches these strings:
+    -- could not find any notes.
+    -- could not find key, sorry
     (Just (nick, key, ts')) -> do
-      liftIO (
-        try
-          (runClientCreateTrigger (TriggerRequest nick Nothing ns key content) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
-      modify (\st -> st { stCurrentQueryTrigger = Nothing })
 
+      case no_key of
+        True -> resetTrigger
+        False -> do
+          liftIO (
+            try
+              (runClientCreateTrigger (TriggerRequest nick Nothing ns key content) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
+          resetTrigger
+  where
+  no_key = T.isPrefixOf "could not find" content
+
+
+
+resetTrigger = modify (\st -> st { stCurrentQueryTrigger = Nothing })
 
 
 parseTrigger :: LogEntry -> StateT TriggerState IO ()
