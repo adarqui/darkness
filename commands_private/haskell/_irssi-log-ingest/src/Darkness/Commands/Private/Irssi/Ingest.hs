@@ -5,11 +5,13 @@ module Darkness.Commands.Private.Irssi.Ingest (
 ) where
 
 
+
 import           Control.Exception            (SomeException, try)
 import           Control.Monad                (void)
 import           Control.Monad.IO.Class       (liftIO)
-import           Control.Monad.Trans.State    (StateT, evalStateT, gets, put)
+import           Control.Monad.Trans.State    (StateT, evalStateT, gets, put, modify)
 import           Data.Monoid                  ((<>))
+import           Data.Text                    (Text)
 import qualified Data.Text                    as T (breakOn, drop, takeWhile,
                                                     uncons)
 import qualified Data.Text.IO                 as T (putStrLn)
@@ -22,23 +24,29 @@ import           Darkness.Listeners.Triggers
 
 
 
+type Namespace = Text
+
+
+
 data TriggerState = TriggerState {
-  currentQueryTrigger :: Maybe (Nickname, MessageContent, UTCTime)
+    stCurrentQueryTrigger :: Maybe (Nickname, MessageContent, UTCTime)
+  , stNamespace :: Namespace
 } deriving (Eq, Show)
 
 
 
 defaultTriggerState :: TriggerState
 defaultTriggerState = TriggerState {
-  currentQueryTrigger = Nothing
+    stCurrentQueryTrigger = Nothing
+  , stNamespace = "unknown"
 }
 
 
 
-ingestTriggers :: FilePath -> IO ()
-ingestTriggers path = do
+ingestTriggers :: Namespace -> FilePath -> IO ()
+ingestTriggers ns path = do
   logs <- importIrssiData path
-  evalStateT (mapM parseLine logs) defaultTriggerState
+  evalStateT (mapM parseLine logs) (TriggerState Nothing ns)
   return ()
 
 
@@ -54,7 +62,8 @@ parseLine entry@(ts, log_type) = do
 parseMessage :: LogEntry -> StateT TriggerState IO ()
 parseMessage (ts, Message offset mode nick content) = do
 
-  trig <- gets currentQueryTrigger
+  trig <- gets stCurrentQueryTrigger
+  ns   <- gets stNamespace
 
   case trig of
     -- If currentTriggerQuery is Nothing, then we attempt to parse this message for trigger query/creation
@@ -66,8 +75,8 @@ parseMessage (ts, Message offset mode nick content) = do
     (Just (nick, key, ts')) -> do
       liftIO (
         try
-          (runClientCreateTrigger (TriggerRequest nick Nothing "efnet_jumping" key content) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
-      put $ TriggerState Nothing
+          (runClientCreateTrigger (TriggerRequest nick Nothing ns key content) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
+      modify (\st -> st { stCurrentQueryTrigger = Nothing })
 
 
 
@@ -88,18 +97,20 @@ parseTrigger (ts, Message offset mode nick content) = do
 parseTriggerAccess :: UTCTime -> Nickname -> MessageContent -> StateT TriggerState IO ()
 parseTriggerAccess ts nick content = do
 
+  ns <- gets stNamespace
+
   liftIO $ T.putStrLn $ nick <> " accessed trigger " <> key
 
   result <- liftIO (
     try (
-      runClientGetTrigger "efnet_jumping" key (Just nick) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
+      runClientGetTrigger ns key (Just nick) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
 
   case result of
     (Left e) -> liftIO $ putStrLn "error"
     (Right v) -> do
       case v of
         (Left _) -> do
-          put $ TriggerState (Just (nick, key, ts))
+          modify (\st -> st { stCurrentQueryTrigger = Just (nick, key, ts) })
           liftIO $ putStrLn "404"
         (Right _) -> liftIO $ putStrLn "added"
 
@@ -111,11 +122,13 @@ parseTriggerAccess ts nick content = do
 parseTriggerCreation :: UTCTime -> Nickname -> MessageContent -> StateT TriggerState IO ()
 parseTriggerCreation ts nick content = do
 
+  ns <- gets stNamespace
+
   liftIO $ T.putStrLn $ nick <> " added trigger " <> key <> " with content " <> value
 
   void $ liftIO (
     try
-      (runClientCreateTrigger (TriggerRequest nick Nothing "efnet_jumping" key value) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
+      (runClientCreateTrigger (TriggerRequest nick Nothing ns key value) (Just ts)) :: IO (Either SomeException (Either String TriggerResponse)))
 
   where
   (key, value') = T.breakOn " " content
