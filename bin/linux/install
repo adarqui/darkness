@@ -16,6 +16,11 @@ apt-get -y install whois host traceroute telnet
 apt-get -y install redis-server
 
 #
+# other tools
+#
+apt-get -y install jq
+
+#
 # sqlite3
 #
 apt-get -y install sqlite3
