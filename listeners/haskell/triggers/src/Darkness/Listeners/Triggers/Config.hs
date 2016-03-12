@@ -34,7 +34,7 @@ instance FromJSON PublicConfig where
   parseJSON (Object o) = PublicConfig
     <$> o .: "host"
     <*> o .: "port"
-    <*> o .: "port"
+    <*> o .: "env"
     <*> o .: "db"
   parseJSON _ = mzero
 
