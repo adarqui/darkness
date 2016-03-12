@@ -22,6 +22,8 @@ var redisLoop = function(redis_config, executor_config) {
     process.exit(1);
   }
 
+  var COMMAND_PATH = commands + ":" + (commands + "/bin");
+
   if (executor_config.prefix === undefined) {
     console.error("executor_config: prefix must be specified");
     process.exit(1);
@@ -103,7 +105,7 @@ var redisLoop = function(redis_config, executor_config) {
           try {
 
             var exe = "./" + _.head(argv);
-            var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands });
+            var cmd = cproc.spawn(exe, _.tail(argv), { cwd: commands, env: { PATH: COMMANDS_PATH } });
 
             console.log("EXE", exe, "ARGV", _.tail(argv), "CWD", commands);
 
