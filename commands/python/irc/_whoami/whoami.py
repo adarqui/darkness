@@ -4,4 +4,4 @@
 
 import os
 
-print os.getenv('DARK_EXEC_IRC_USER', "You don't exist.")
+print os.getenv('DARK_EXEC_IRC_NICK', "You don't exist.")
