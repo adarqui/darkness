@@ -10,6 +10,7 @@ import           Control.Monad.Logger                 (runNoLoggingT,
                                                        runStdoutLoggingT)
 import           Data.Aeson
 import qualified Data.ByteString.Lazy.Char8           as BSLC
+import           Data.Monoid                          ((<>))
 import qualified Data.Text                            as T (pack)
 import           Network.Wai                          (Middleware)
 import           Network.Wai.Middleware.RequestLogger (logStdout, logStdoutDev)
@@ -59,8 +60,8 @@ data Environment =
 
 instance FromJSON Environment where
   parseJSON (String "development") = pure Development
-  parseJSON (String "test") = pure Test
-  parseJSON (String "production") = pure Production
+  parseJSON (String "test")        = pure Test
+  parseJSON (String "production")  = pure Production
   parseJSON _ = mzero
 
 
@@ -81,7 +82,7 @@ publicConfigToInternalConfig PublicConfig{..} = do
   pool <- (case publicConfigEnv of
     Test -> runNoLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool Test)
     e    -> runStdoutLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool e))
-  return $ Config pool dark_data publicConfigHost publicConfigPort publicConfigEnv publicConfigDb
+  return $ Config pool dark_data publicConfigHost publicConfigPort publicConfigEnv (dark_data <> "/" <> publicConfigDb)
 
 
 
