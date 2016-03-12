@@ -41,7 +41,7 @@ data CommandOptions = CommandOptions {
 data SubCommandOptions
   = GetAllTriggers
   | GetTriggers Ns
-  | GetTrigger Ns Key
+  | GetTrigger Ns Key (Maybe Author)
   | CreateTrigger Ns Key Value Author (Maybe AuthorMeta)
   | UpdateTrigger Ns Key Ns Key Value Author (Maybe AuthorMeta)
 --  | CreateTriggerHack Ns Key
@@ -98,7 +98,10 @@ parseSubCommand_GetTriggers = GetTriggers <$> argument text (metavar "NAMESPACE"
 
 
 parseSubCommand_GetTrigger :: Parser SubCommandOptions
-parseSubCommand_GetTrigger = GetTrigger <$> argument text (metavar "NAMESPACE") <*> argument text (metavar "KEY")
+parseSubCommand_GetTrigger = GetTrigger
+  <$> argument text (metavar "NAMESPACE")
+  <*> argument text (metavar "KEY")
+  <*> optional (argument text (metavar "AUTHOR"))
 
 
 
@@ -136,7 +139,7 @@ run (Options CommandOptions{..} sub) = do
   case sub of
     GetAllTriggers         -> runClientGetAllTriggers >>= putJSON
     (GetTriggers ns)       -> runClientGetTriggers ns >>= putJSON
-    (GetTrigger ns key)    -> runClientGetTrigger ns key Nothing Nothing >>= putJSON
+    (GetTrigger ns key author) -> runClientGetTrigger ns key author Nothing >>= putJSON
     (DeleteTrigger ns key) -> runClientDeleteTrigger ns key >>= putJSON
     (CreateTrigger ns key value' author author_meta) -> runClientCreateTrigger (TriggerRequest author author_meta ns key value') Nothing >>= putJSON
     (UpdateTrigger orig_ns orig_key new_ns new_key new_value' new_author new_author_meta) ->
