@@ -20,6 +20,7 @@ serviceMain config_path = do
 
     public_config <- readPublicConfig config_path
     cfg <- publicConfigToInternalConfig public_config
+    putStrLn $ configDb cfg
 
     let
       logger = setLogger (configEnv cfg)

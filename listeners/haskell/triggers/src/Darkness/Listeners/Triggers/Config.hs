@@ -14,7 +14,7 @@ import           Data.Monoid                          ((<>))
 import qualified Data.Text                            as T (pack)
 import           Network.Wai                          (Middleware)
 import           Network.Wai.Middleware.RequestLogger (logStdout, logStdoutDev)
-import           System.Environment                   (lookupEnv)
+import           System.Environment                   (getEnv, lookupEnv)
 
 import           Database.Persist.Sqlite              (ConnectionPool,
                                                        createSqlitePool)
@@ -66,19 +66,11 @@ instance FromJSON Environment where
 
 
 
-defaultPublicConfig :: PublicConfig
-defaultPublicConfig = PublicConfig {
-    publicConfigHost = triggersServiceHost
-  , publicConfigPort = triggersServicePort
-  , publicConfigEnv  = triggersServiceEnv
-  , publicConfigDb   = triggersServiceDb
-}
-
-
 
 publicConfigToInternalConfig :: PublicConfig -> IO Config
 publicConfigToInternalConfig PublicConfig{..} = do
-  dark_data <- lookupSetting "DARK_DATA" "/tmp"
+--  dark_data <- lookupSetting "DARK_DATA" "/tmp"
+  dark_data <- getEnv "DARK_DATA"
   pool <- (case publicConfigEnv of
     Test -> runNoLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool Test)
     e    -> runStdoutLoggingT $ createSqlitePool (T.pack publicConfigDb) (envPool e))
