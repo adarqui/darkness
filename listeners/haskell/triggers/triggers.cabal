@@ -33,7 +33,6 @@ library
                      , servant-server
                      , servant-client
                      , persistent >= 2.2.4
-                     , persistent-postgresql >= 2.2.2
                      , persistent-sqlite
                      , persistent-template >= 2.1.5
                      , time >= 1.5.0.1

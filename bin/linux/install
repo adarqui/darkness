@@ -16,6 +16,14 @@ apt-get -y install whois host traceroute telnet
 apt-get -y install redis-server
 
 #
+# sqlite3
+#
+
+#
+# postgresql libs
+#
+
+#
 # golang
 #
 if [ ! -f /usr/local/go/bin/go ] ; then
