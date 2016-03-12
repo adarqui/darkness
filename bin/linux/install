@@ -18,10 +18,7 @@ apt-get -y install redis-server
 #
 # sqlite3
 #
-
-#
-# postgresql libs
-#
+apt-get -y install sqlite3
 
 #
 # golang
