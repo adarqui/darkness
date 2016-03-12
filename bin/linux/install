@@ -54,6 +54,9 @@ export PATH=$PATH:/usr/local/node-v4.3.1-linux-x64/bin
 
 npm update
 
+# node.js.. :/
+npm install -g forever
+
 
 
 #
