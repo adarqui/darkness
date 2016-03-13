@@ -1,21 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 # order matters..
+services="connected ping url_metadata executor triggers relay"
 
-# start irc connected daemon
-(cd core/go/proto/irc/connected; make build; make run &)
-
-# start irc ping daemon
-(cd core/go/proto/irc/ping; make build; make run &)
-
-# start url_metadata resolver daemon
-(cd listeners/nodejs/url_metadata; make build; make run &)
-
-# start command executor
-(cd core/nodejs/temp/executor; make build; make run &)
-
-# start triggers service
-(cd listeners/haskell/triggers; make build; make run &)
-
-# start relay daemon
-(cd core/go/relay; make build; make run &)
+for i in ${services}; do
+  (cd services/$i; ./start.sh)
+done

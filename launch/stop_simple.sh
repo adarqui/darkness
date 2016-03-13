@@ -1,19 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-# stop irc connected daemon
-(cd core/go/proto/irc/connected; make kill)
+# order matters..
+services="connected ping url_metadata executor triggers relay"
 
-# stop irc ping daemon
-(cd core/go/proto/irc/ping; make kill)
-
-# stop url_metadata resolver daemon
-(cd listeners/nodejs/url_metadata; make kill)
-
-# stop command executor
-(cd core/nodejs/temp/executor; make kill)
-
-# stop triggers service
-(cd listeners/haskell/triggers; make kill)
-
-# stop relay daemon
-(cd core/go/relay; make kill)
+for i in ${services}; do
+  (cd services/$i; ./stop.sh)
+done
