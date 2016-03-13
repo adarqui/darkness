@@ -3,7 +3,7 @@
 export PATH="$PATH:${DARK_ROOT}/listeners/haskell/triggers/bin"
 
 if (( $# <= 1 )) ; then
-  echo "usage: $0 <key> value for key.." && exit 1
+  echo "usage: ${0##*/} <key> value for key.." && exit 1
 fi
 
 key="${1}"

@@ -3,11 +3,11 @@
 export PATH="$PATH:${DARK_ROOT}/listeners/haskell/triggers/bin"
 
 if (( $# < 3 )) ; then
-  echo "usage: $0 <offset:0-x> <search_by:{key,value,author}> <keywords>" && exit 1
+  echo "usage: ${0##*/} <search_by:{key,value,author}> <offset:0-x> <keywords>" && exit 1
 fi
 
-offset="$1"
-search_by=`echo "$2" | tr '[:upper:]' '[:lower:]'`
+search_by=`echo "$1" | tr '[:upper:]' '[:lower:]'`
+offset="$2"
 shift 2
 keywords="$@"
 
