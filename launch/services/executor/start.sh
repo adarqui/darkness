@@ -2,4 +2,4 @@
 
 
 # start command executor
-(cd core/nodejs/temp/executor; make build; make run &)
+(cd "${DARK_ROOT}/core/nodejs/temp/executor"; make build; make run &)

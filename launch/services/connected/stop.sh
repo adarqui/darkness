@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # stop irc connected daemon
-(cd core/go/proto/irc/connected; make kill)
+(cd "${DARK_ROOT}/core/go/proto/irc/connected"; make kill)

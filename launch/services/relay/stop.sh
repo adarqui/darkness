@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # stop relay daemon
-(cd core/go/relay; make kill)
+(cd "${DARK_ROOT}/core/go/relay"; make kill)

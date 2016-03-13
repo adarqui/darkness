@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # stop irc ping daemon
-(cd core/go/proto/irc/ping; make kill)
+(cd "${DARK_ROOT}/core/go/proto/irc/ping"; make kill)

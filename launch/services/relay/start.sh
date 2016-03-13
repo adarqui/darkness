@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # start relay daemon
-(cd core/go/relay; make build; make run &)
+(cd "${DARK_ROOT}/core/go/relay"; make build; make run &)

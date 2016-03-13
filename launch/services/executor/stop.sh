@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # stop command executor
-(cd core/nodejs/temp/executor; make kill)
+(cd "${DARK_ROOT}/core/nodejs/temp/executor"; make kill)

@@ -1,5 +1,4 @@
 #!/bin/sh
 
 # start triggers service
-(cd listeners/haskell/triggers; make build; make run &)
-
+(cd "${DARK_ROOT}/listeners/haskell/triggers"; make build; make run &)
