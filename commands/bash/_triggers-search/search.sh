@@ -20,7 +20,7 @@ channel="${DARK_EXEC_IRC_CHANNEL#\#}"
 nick="${DARK_EXEC_IRC_NICK}"
 ns="${label}:${channel}"
 
-result=`triggers-cli search-triggers "${ns}" "${keywords}" "${search_by}" 20 "${offset}" 2>/dev/null`
+result=`triggers-cli search-triggers "${ns}" "${keywords}" "${search_by}" 50 "${offset}" 2>/dev/null`
 
 if (( $? != 0 )) || [ "${result}" == "[]" ]; then
   echo "search criteria not found."
