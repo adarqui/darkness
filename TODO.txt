@@ -40,3 +40,13 @@ commands:
 
 repls:
 - lambdabot style repl .. repl's for various languages
+
+auto-rejoin:
+- auto rejoin listener
+- should use the same config file as connected..
+- could also do 'heartbeat' rejoins
+
+triggers:
+- popularity feature
+- popularity in a date range
+- most popular this week, month etc..
