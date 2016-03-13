@@ -7,7 +7,7 @@ if (( $# < 3 )) ; then
 fi
 
 search_by=`echo "$1" | tr '[:upper:]' '[:lower:]'`
-offset="$2"
+offset=$(( $2 *50 ))
 shift 2
 keywords="$@"
 
