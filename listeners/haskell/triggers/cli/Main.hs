@@ -46,6 +46,7 @@ data SubCommandOptions
   | UpdateTrigger Ns Key Ns Key Value Author (Maybe AuthorMeta)
 --  | CreateTriggerHack Ns Key
   | DeleteTrigger Ns Key
+  | SearchTriggers Ns Key (Maybe Text) (Maybe Int) (Maybe Int)
   deriving (Eq, Show)
 
 
@@ -83,7 +84,8 @@ parseSubCommandOptions =
     command "get-trigger"      (info parseSubCommand_GetTrigger fullDesc)     <>
     command "create-trigger"   (info parseSubCommand_CreateTrigger fullDesc)  <>
     command "update-trigger"   (info parseSubCommand_UpdateTrigger fullDesc)  <>
-    command "delete-trigger"   (info parseSubCommand_DeleteTrigger fullDesc)
+    command "delete-trigger"   (info parseSubCommand_DeleteTrigger fullDesc)  <>
+    command "search-triggers"  (info parseSubCommand_SearchTriggers fullDesc)
 
 
 
@@ -134,6 +136,20 @@ parseSubCommand_DeleteTrigger = DeleteTrigger <$> argument text (metavar "NAMESP
 
 
 
+-- TODO: fix this eventually
+-- needs short & long options for search_by, limit, and offset... also defaults
+-- search_by should be: --search-author , --search-key , --search-value
+parseSubCommand_SearchTriggers :: Parser SubCommandOptions
+parseSubCommand_SearchTriggers =
+  SearchTriggers
+  <$> argument text (metavar "NAMESPACE")
+  <*> argument text (metavar "SEARCH_CRITERIA")
+  <*> optional (argument text (metavar "SEARCH_BY"))
+  <*> optional (argument auto (metavar "LIMIT"))
+  <*> optional (argument auto (metavar "OFFSET"))
+
+
+
 run :: Options -> IO ()
 run (Options CommandOptions{..} sub) = do
   case sub of
@@ -144,6 +160,7 @@ run (Options CommandOptions{..} sub) = do
     (CreateTrigger ns key value' author author_meta) -> runClientCreateTrigger (TriggerRequest author author_meta ns key value') Nothing >>= putJSON
     (UpdateTrigger orig_ns orig_key new_ns new_key new_value' new_author new_author_meta) ->
       runClientUpdateTrigger orig_ns orig_key (TriggerRequest new_author new_author_meta new_ns new_key new_value') >>= putJSON
+    (SearchTriggers ns criteria msearch_by mlimit moffset) -> runClientSearchTriggers ns criteria msearch_by mlimit moffset >>= putJSON
 
 
 

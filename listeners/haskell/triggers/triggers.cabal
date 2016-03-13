@@ -26,6 +26,7 @@ library
                      , aeson
                      , bytestring
                      , either >= 4.4.1
+                     , esqueleto >= 2.4.3
                      , monad-logger >= 0.3.18
                      , mtl >= 2.2.1
                      , servant >= 0.4.4.6

@@ -24,7 +24,7 @@ clientApi = Proxy
 
 
 
-clientGetAllTriggers :<|> clientGetTriggers :<|> clientGetTrigger :<|> clientCreateTrigger :<|> clientUpdateTrigger :<|> clientDeleteTrigger = client clientApi (BaseUrl Http triggersServiceHost triggersServicePort)
+clientGetAllTriggers :<|> clientGetTriggers :<|> clientGetTrigger :<|> clientCreateTrigger :<|> clientUpdateTrigger :<|> clientDeleteTrigger :<|> clientSearchTriggers = client clientApi (BaseUrl Http triggersServiceHost triggersServicePort)
 
 
 
@@ -55,6 +55,11 @@ runClientUpdateTrigger ns key trigger_request = fixResult <$> runEitherT (client
 
 runClientDeleteTrigger :: Text -> Text -> IO (Either String ())
 runClientDeleteTrigger ns key = fixResult <$> runEitherT (clientDeleteTrigger ns key)
+
+
+
+runClientSearchTriggers :: Text -> Text -> Maybe Text -> Maybe Int -> Maybe Int -> IO (Either String [TriggerResponse])
+runClientSearchTriggers ns criteria msearch_by mlimit moffset = fixResult <$> runEitherT (clientSearchTriggers ns criteria msearch_by mlimit moffset)
 
 
 

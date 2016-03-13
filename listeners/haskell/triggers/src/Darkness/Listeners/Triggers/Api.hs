@@ -15,6 +15,7 @@ import           Control.Monad.Trans.Either         (EitherT, left)
 import           Data.Text                          (Text)
 import qualified Data.Text                          as T (pack, unpack)
 import           Data.Time                          (UTCTime, getCurrentTime)
+import qualified Database.Esqueleto                 as E
 import           Database.Persist                   (Entity (..), deleteWhere,
                                                      get, insert, selectFirst,
                                                      selectList, update,
@@ -39,6 +40,7 @@ type TriggerAPI =
     :<|> "triggers" :> ReqBody '[JSON] TriggerRequest :> QueryParam "ts" UTCTime :> Post '[JSON] TriggerResponse
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> ReqBody '[JSON] TriggerRequest :> Put '[JSON] TriggerResponse
     :<|> "triggers" :> Capture "ns" Text :> Capture "key" Text :> Delete '[JSON] ()
+    :<|> "search" :> Capture "ns" Text :> Capture "criteria" Text :> QueryParam "search_by" Text :> QueryParam "limit" Int :> QueryParam "offset" Int :> Get '[JSON] [TriggerResponse]
 
 
 
@@ -79,7 +81,7 @@ readerToEither cfg = Nat $ \x -> runReaderT x cfg
 
 
 server :: ServerT TriggerAPI AppM
-server = apiGetAllTriggers :<|> apiGetTriggers :<|> apiGetTrigger :<|> apiCreateTrigger :<|> apiUpdateTrigger :<|> apiDeleteTrigger
+server = apiGetAllTriggers :<|> apiGetTriggers :<|> apiGetTrigger :<|> apiCreateTrigger :<|> apiUpdateTrigger :<|> apiDeleteTrigger :<|> apiSearchTriggers
 
 
 
@@ -157,3 +159,35 @@ apiUpdateTrigger ns key TriggerRequest{..} = do
 apiDeleteTrigger :: Text -> Text -> AppM ()
 apiDeleteTrigger ns key = do
   runDb $ deleteWhere [ TriggerNamespace ==. ns, TriggerKey ==. key ]
+
+
+
+apiSearchTriggers :: Text -> Text -> Maybe Text -> Maybe Int -> Maybe Int -> AppM [TriggerResponse]
+apiSearchTriggers ns criteria msearch_by mlimit moffset = do
+
+  triggers <- runDb $ E.select $
+                E.from $ \trigger -> do
+                search_by trigger
+                E.limit offset
+                E.offset offset
+                return trigger
+
+  let trigger_responses = map (\(Entity _ trigger) -> triggerToTriggerResponse trigger) triggers
+  return trigger_responses
+
+  where
+  limit  = fromIntegral $ maybe (-1) id mlimit
+  offset = fromIntegral $ maybe 0 id moffset
+  search_by trigger = case msearch_by of
+                Nothing         -> where_clause TriggerKey
+                (Just "value")  -> where_clause TriggerValue
+                (Just "author") -> where_clause TriggerAuthor
+                -- default to key
+                (Just _)        -> where_clause TriggerKey
+    where
+    where_clause field =
+      E.where_ (
+        (trigger E.^. TriggerNamespace E.==. E.val ns)
+        E.&&.
+        ((trigger E.^. field) `E.like` ((E.%) E.++. E.val criteria E.++. (E.%)))
+        )
