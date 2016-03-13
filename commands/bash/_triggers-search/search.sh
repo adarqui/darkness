@@ -28,6 +28,4 @@ if (( $? != 0 )) || [ "${result}" == "[]" ]; then
 fi
 
 keys=`echo "${result}" | jq -r '[.[] | .key] | @csv'`
-keys_=${keys/\",\"/ , }
-keys__=${keys_//\"}
-echo "${keys__}"
+echo ${keys//\"}
