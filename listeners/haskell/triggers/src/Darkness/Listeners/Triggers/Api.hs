@@ -168,7 +168,7 @@ apiSearchTriggers ns criteria msearch_by mlimit moffset = do
   triggers <- runDb $ E.select $
                 E.from $ \trigger -> do
                 search_by trigger
-                E.limit offset
+                E.limit limit
                 E.offset offset
                 return trigger
 
