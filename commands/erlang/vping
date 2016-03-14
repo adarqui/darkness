@@ -1,1 +1,4 @@
-_vping/vping.sh
+#!/bin/sh
+
+cd "${DARK_CMD}/erlang/_vping"
+erl -noshell -s vping start -s init stop
