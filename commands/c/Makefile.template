@@ -1,0 +1,8 @@
+build:
+	gcc -Wall -Werror main.c -o main
+
+clean:
+	rm -f main
+
+test:
+	echo test
