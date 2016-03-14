@@ -37,6 +37,8 @@ commands:
 - youtube
 - boxrec
 - sherdog
+- https://github.com/goldfirere/glambda
+- https://github.com/lambdabot/lambdabot/tree/master/lambdabot-haskell-plugins/src/Lambdabot/Plugin/Haskell
 
 repls:
 - lambdabot style repl .. repl's for various languages
