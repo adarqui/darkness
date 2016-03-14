@@ -11,6 +11,7 @@ b~*
 ebin
 .rebar
 *.beam
+*.dump
 
 # haskell
 .stack-work
