@@ -1,0 +1,8 @@
+build:
+	go build -o main
+
+clean:
+	rm -f main
+
+test:
+	echo test
