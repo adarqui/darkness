@@ -1,0 +1,8 @@
+build:
+	ghc -Wall -Werror main.hs -o main
+
+clean:
+	rm -f main *.hi *.o
+
+test:
+	echo test
