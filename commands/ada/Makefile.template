@@ -1,0 +1,8 @@
+build:
+	gnatmake main
+
+clean:
+	gnatclean main
+
+test:
+	echo test
