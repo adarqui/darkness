@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd _argc
+cd "${DARK_CMD}/_argc"
 lein run "$@"

@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd _vping
+cd "${DARK_CMD}/_vping"
 lein run

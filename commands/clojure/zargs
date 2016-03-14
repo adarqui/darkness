@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd _zargs
+cd "${DARK_CMD}/_zargs"
 lein run "$@"
