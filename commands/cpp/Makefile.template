@@ -1,0 +1,8 @@
+build:
+	g++ -Wall -Werror main.cpp -o main
+
+clean:
+	rm -f main
+
+test:
+	echo test
