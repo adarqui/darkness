@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd "${DARK_CMD}/_argc"
+cd "${DARK_CMD}/clojure/_argc"
 lein run "$@"

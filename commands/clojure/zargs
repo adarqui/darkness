@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd "${DARK_CMD}/_zargs"
+cd "${DARK_CMD}/clojure/_zargs"
 lein run "$@"
