@@ -50,10 +50,10 @@
     console.log(
       "(" +
         "currently: " + data.currently.summary + ", " +
-        "precip-probability: " + data.currently.precipProbability + ", " +
-        "temperature: " + data.currently.temperature + " F, " +
-        "humidity: " + data.currently.humidity + ", " +
-        "wind-speed: " + data.currently.windSpeed + " mph) " +
+        "precip-probability: " + (data.currently.precipProbability * 100) + "%, " +
+        "temperature: " + data.currently.temperature + "F, " +
+        "humidity: " + (data.currently.humidity * 100) + "%, " +
+        "wind-speed: " + data.currently.windSpeed + "mph) " +
       "(minutely: " + data.minutely.summary + ") " +
       "(hourly: " + data.hourly.summary + ") " +
       "(daily: " + data.daily.summary + ")"
