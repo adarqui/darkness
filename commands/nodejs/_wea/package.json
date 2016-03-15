@@ -9,6 +9,7 @@
   "author": "Andrew Darqui <andrew.darqui@gmail.com> (https://github.com/adarqui)",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.3.4",
     "weather-zip": "^1.0.0"
   }
 }
