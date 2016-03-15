@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// this cmd uses the api @ https://developer.forecast.io
+
 (function() {
 
   "use strict";
