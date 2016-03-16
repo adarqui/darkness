@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"${DARK_CMD}/bin/google-search" "$*"
