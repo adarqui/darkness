@@ -141,7 +141,7 @@ if [ ! -f "`which opam`" ] ; then
 fi
 
 if [ ! -f "`which oasis`" ] ; then
-  (yes | opam install oasis)
+  opam install -y oasis
 fi
 
 
