@@ -125,10 +125,11 @@ fi
 
 if [ ! -f "`which opam`" ] ; then
   wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh -O - | sh -s /usr/local/bin
+  yes | opam init
 fi
 
 if [ ! -f "`which oasis`" ] ; then
-  opam install oasis
+  yes | opam install oasis
 fi
 
 
