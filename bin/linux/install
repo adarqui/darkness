@@ -132,3 +132,12 @@ fi
 if [ ! -f "`which erlc`" ] ; then
   apt-get -y install erlang
 fi
+
+
+
+#
+# R
+#
+if [ ! -f "`which RScript`" ] ; then
+  apt-get -y install r-base
+fi
