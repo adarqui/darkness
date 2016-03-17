@@ -84,8 +84,8 @@ fi
 #
 
 if [ ! "`which idris`" ] ; then
-  cabal update
-  cabal install idris
+  stack update
+  stack install idris --local-bin-path=/usr/local/bin
 fi
 
 
@@ -141,7 +141,7 @@ if [ ! -f "`which opam`" ] ; then
 fi
 
 if [ ! -f "`which oasis`" ] ; then
-  yes | opam install oasis
+  (yes | opam install oasis)
 fi
 
 
