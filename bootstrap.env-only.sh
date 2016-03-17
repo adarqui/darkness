@@ -16,6 +16,7 @@ export DARK_DATA="${DARK_ROOT}/data"
 export DARK_LOGS="${DARK_ROOT}/logs"
 export DARK_CMD="${DARK_ROOT}/commands"
 export DARK_CMD_PRIVATE="${DARK_ROOT}/commands_private"
+export DARK_BUILD="${DARK_ROOT}/build/linux"
 
 export GOPATH="${HOME}/build/"
 export NODE_PATH="${DARK_ROOT}/core/nodejs/lib/"
