@@ -138,6 +138,6 @@ fi
 #
 # R
 #
-if [ ! -f "`which RScript`" ] ; then
+if [ ! -f "`which Rscript`" ] ; then
   apt-get -y install r-base
 fi
