@@ -19,6 +19,9 @@ ebin
 cabal.sandbox.config
 *.hi
 
+# idris
+*.ibc
+
 # ocaml / oasis
 _build
 *.byte
