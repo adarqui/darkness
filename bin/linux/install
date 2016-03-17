@@ -80,6 +80,17 @@ fi
 
 
 #
+# idris
+#
+
+if [ ! "`which idris`" ] ; then
+  cabal update
+  cabal install idris
+fi
+
+
+
+#
 # purescript
 #
 npm install -g purescript
