@@ -1,3 +1,3 @@
-#!/usr/bin/env RScript
+#!/usr/bin/env Rscript
 
 print("r")
