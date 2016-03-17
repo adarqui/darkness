@@ -14,6 +14,7 @@ apt-get -y install tcpdump
 apt-get -y install strace gdb
 apt-get -y install whois host traceroute telnet
 apt-get -y install redis-server
+apt-get -y install pkg-config
 
 #
 # other tools
