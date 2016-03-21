@@ -23,4 +23,9 @@ author=`echo "$value" | jq -r .author`
 created_at=`echo "$value" | jq -r .created_at`
 counter=`echo $value | jq -r .counter`
 
-echo "${author} created ${key} on ${created_at} and it has been accessed ${counter} times."
+time="times"
+if (( counter == 1 )) ; then
+  time="time"
+fi
+
+echo "${author} created ${key} on ${created_at} and it has been accessed ${counter} ${time}."
