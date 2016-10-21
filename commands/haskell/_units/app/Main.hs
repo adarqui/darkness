@@ -2,12 +2,12 @@ module Main where
 
 
 
-import Data.Monoid
 import           Data.List
+import           Data.Monoid
 import           Data.Quantities
 import qualified Data.Quantities    as Quantities
 import           System.Environment
-import System.Exit
+import           System.Exit
 
 
 
