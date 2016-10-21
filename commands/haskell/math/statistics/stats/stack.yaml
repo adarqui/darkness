@@ -1,0 +1,5 @@
+flags: {}
+packages:
+- '.'
+extra-deps: [optparse-generic-1.1.0]
+resolver: lts-5.8

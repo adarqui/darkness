@@ -1,0 +1,15 @@
+{
+  "name": "wea",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Darqui <andrew.darqui@gmail.com> (https://github.com/adarqui)",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.3.4",
+    "weather-zip": "^1.0.0"
+  }
+}

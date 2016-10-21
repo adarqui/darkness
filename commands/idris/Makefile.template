@@ -1,0 +1,8 @@
+build:
+	idris main.idr -o main
+
+clean:
+	rm -f main *.ibc
+
+test:
+	echo test
