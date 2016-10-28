@@ -19,15 +19,6 @@ data RunTest
   | VO2Max_Cooper_Miles  Double
   deriving (Show, Generic, Typeable)
 
--- instance Show RunTest where
---   show RunTest_VO2Max_Cooper_Meters = "haskell"
---   show RunTest_VO2Max_Cooper_Miles  = "purescript"
-
--- instance Read RunTest where
---   readsPrec _ "vo2max-cooper-meters"= [(RunTest_VO2Max_Cooper_Meters, "")]
---   readsPrec _ "vo2max-cooper-miles" = [(RunTest_VO2Max_Cooper_Miles, "")]
---   readsPrec _ _                     = error "RunTest not supported"
-
 instance ParseRecord RunTest
 
 
