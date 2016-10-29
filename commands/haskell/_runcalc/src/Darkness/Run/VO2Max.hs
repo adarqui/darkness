@@ -4,7 +4,7 @@
 module Darkness.Run.VO2Max (
     cooperMeters
   , cooperMiles
-  , cooperPretty
+  , vo2Pretty
   , uso
 ) where
 
@@ -31,11 +31,6 @@ cooperMeters d12 = (d12 - 504.9) / 44.73
 cooperMiles :: Double -> Double
 cooperMiles d12 = (35.97 * d12) - 11.29
 
-cooperPretty :: Double -> String
-cooperPretty = printf "%.2f mL/(kg·min)"
-
-
-
 -- Uth–Sørensen–Overgaard–Pedersen estimation[edit]
 -- Another estimate of VO2 max, based on maximum and resting heart rates, was created by a group of researchers from Denmark.[4] It is given by:
 --
@@ -46,3 +41,8 @@ cooperPretty = printf "%.2f mL/(kg·min)"
 
 uso :: Double -> Double -> Double
 uso hr_max hr_min = 15.3 * (hr_max / hr_min)
+
+
+
+vo2Pretty :: Double -> String
+vo2Pretty = printf "%.2f mL/(kg·min)"
