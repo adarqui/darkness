@@ -1,7 +1,11 @@
+-- https://en.wikipedia.org/wiki/VO2_max
+--
+
 module Darkness.Run.VO2Max (
     cooperMeters
   , cooperMiles
   , cooperPretty
+  , uso
 ) where
 
 
@@ -29,3 +33,16 @@ cooperMiles d12 = (35.97 * d12) - 11.29
 
 cooperPretty :: Double -> String
 cooperPretty = printf "%.2f mL/(kg·min)"
+
+
+
+-- Uth–Sørensen–Overgaard–Pedersen estimation[edit]
+-- Another estimate of VO2 max, based on maximum and resting heart rates, was created by a group of researchers from Denmark.[4] It is given by:
+--
+-- VO2max =~ 15.3 * (HRmax / HRmin)
+--
+-- This equation uses the ratio of maximum heart rate (HRmax) to resting heart rate (HRrest) to predict VO2 max, and is measured in units of mL/kg/minute. The researchers cautioned that the conversion rule was based on measurements on well-trained men aged 21 to 51 only, and may not be reliable when applied to other sub-groups. They also advised that the formula is most reliable when based on actual measurement of maximum heart rate, rather than an age-related estimate.
+--
+
+uso :: Double -> Double -> Double
+uso hr_max hr_min = 15.3 * (hr_max / hr_min)
