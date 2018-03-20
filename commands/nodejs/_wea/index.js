@@ -49,6 +49,17 @@
 
     weather.get(zip)
     .then(function (data){
+
+      if (data === undefined) {
+        console.log('no data found.');
+        return;
+      }
+
+      data.currently = data.currently === undefined ? "empty" : data.currently;
+      data.minutely = data.minutely === undefined ? "empty" : data.minutely;
+      data.hourly = data.hourly === undefined ? "empty" : data.hourly;
+      data.daily = data.daily === undefined ? "empty" : data.daily;
+
       // ugly.. we might need different printers, for example: irc, cli
       // this goes for all darkness commands..
       // this is condensed, abbreviated one line output is suitable for irc
